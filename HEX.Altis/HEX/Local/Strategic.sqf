@@ -80,30 +80,96 @@ LOC_FNC_ORDER = {
 	remoteExec ["HEX_FNC_CLIC", 0, false];
 };
 
-onMapSingleClick {
-	if (LOC_MODE == "SELECT") then {
-		_pos spawn LOC_FNC_SELECT;
-	};
-	
-	if (LOC_MODE == "ORDER") then {
-		_pos spawn LOC_FNC_ORDER;
-	};
-	true;
-};
-
 /// Sound effect
 LOC_FNC_EFFECT = {
-	private _sounds = [
-		"a3\dubbing_radio_f\sfx\radionoise1.ogg", 
-		"a3\dubbing_radio_f\sfx\radionoise2.ogg", 
-		"a3\dubbing_radio_f\sfx\radionoise3.ogg"
-	];
 	
-	private _sound = _sounds select floor random count _sounds;
-	
+	private _sound = HEX_SOUNDS select floor random count HEX_SOUNDS;
+	private _radio = HEX_RADIO select floor random count HEX_RADIO;
 	private _pitch = random 1;
-	LOC_SOUND = playSoundUI [_sound, 2 - _pitch, _pitch];
+	playSoundUI [_sound, 1, random 1];
+	LOC_SOUND = playSoundUI [_radio, 2 - _pitch, _pitch];
 };
+
+LOC_FNC_ENDTURN = {
+	hint str "TURN ENDED";
+	/// update info boxes?
+};
+
+/// Open menu
+[] spawn {
+	private _open = false;
+	while {HEX_PHASE == "STRATEGIC"} do {
+		sleep 0.1;
+		if (visibleMap && !_open) then {
+			(findDisplay 46) createDisplay "HEX_STRATEGIC";
+			private _menu = findDisplay 1300;
+			_open = true;
+			private _time = _menu displayCtrl 1302;
+			private _weather = _menu displayCtrl 1303;
+			private _turn = _menu displayCtrl 1303;
+
+			private _color = [0, 0.3, 0.6, 0.5];
+			
+			if (playerSide == east) then {
+				_color = [0.5, 0, 0, 0.5];
+			};
+
+			_time ctrlSetBackgroundColor _color;
+			_weather ctrlSetBackgroundColor _color;
+			_turn ctrlSetBackgroundColor _color;
+			
+			/// Command
+			onMapSingleClick {
+				if (LOC_MODE == "SELECT") then {
+					_pos spawn LOC_FNC_SELECT;
+				};
+	
+				if (LOC_MODE == "ORDER") then {
+					_pos spawn LOC_FNC_ORDER;
+				};
+				true;
+			};
+		};
+		
+		/// Update information
+		if (visibleMap && _open) then {
+			private _menu = findDisplay 1300;
+			private _info = _menu displayCtrl 1301;
+			private _time = _menu displayCtrl 1302;
+			private _weather = _menu displayCtrl 1303;
+			private _turn = _menu displayCtrl 1304;
+			
+			if (HEX_TURN == west) then {
+				_info ctrlSetBackgroundColor [0, 0.3, 0.6, 0.5];
+				_info ctrlSetText "BLUFOR TURN";
+			} else {
+				_info ctrlSetBackgroundColor [0.5, 0, 0, 0.5];	
+				_info ctrlSetText "OPFOR TURN";
+			};
+			
+			_time ctrlSetText ((HEX_TIME select 0) + " (" + (HEX_TIME select 1) + ">" + (HEX_TIME select 2) + ">"  + (HEX_TIME select 3) + ")");
+			_weather ctrlSetText ((HEX_WEATHER select 0) + " (" + (HEX_WEATHER select 1) + ">" + (HEX_WEATHER select 2) + ">"  + (HEX_WEATHER select 3) + ")");
+			
+			if (side player == HEX_TURN) then {
+				_turn ctrlSetText "END TURN";
+			} else {
+				_turn ctrlSetText "WAITING...";	
+			};
+		};
+		
+		if (!visiblemap && _open) then {
+			(findDisplay 1300) closedisplay 1;
+			_open = false;
+			
+		};
+	};
+};
+
+/// Third Menu:
+/// Turn info
+/// End Turn Button
+/// Time /// DAWN / DAY / DUSK / NIGHT
+/// Weather forecast: CLEAR / CLOUDY / STORM / FOGGY
 
 /// TBD: Road +1 move skip:
 /// Origin (1st hex) has to have road hex

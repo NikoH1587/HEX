@@ -96,14 +96,14 @@ HEX_FNC_CLIC = {
 		LOC_MODE = "SELECT";
 	};	
 	
+	/// Stop radio noise;
 	if (isNil "LOC_SOUND" == false) then {
 		stopSound LOC_SOUND;
+		private _sound = HEX_SOUNDS select floor random count HEX_SOUNDS;
+		playSoundUI [_sound, 1, random 1];
 	};
-
-	/// Stop sound effect if exists
-	if (isNil "LOC_SOUND" == false) then {
-		stopSound LOC_SOUND;
-	};
+	
+	
 };
 
 /// Updates counter markers on client
