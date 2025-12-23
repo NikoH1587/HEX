@@ -20,7 +20,7 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 		private _landT = !(surfaceisWater [_x, _y + (HEX_SIZE / 2)]);
 		{if (_x == true) then {_land = true}}forEach [_landL, _landR, _landB, _landT];
         if (_land) then {
-			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0];
+			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 1];
 		};
     };
 };
@@ -32,8 +32,8 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 {
 	private _counter = _x;
 	private _act = 1;
-	if (_x in ["b_mech_inf", "b_armor"]) then {_act = 2};
-	if (_x in ["b_motor_inf", "b_recon"]) then {_act = 3};
+	if (_x in ["b_mech_inf", "b_armor", "b_antiair"]) then {_act = 2};
+	if (_x in ["b_motor_inf", "b_recon", "b_support"]) then {_act = 3};
 	private _sorted = [
 		HEX_GRID, 
 		[], 
@@ -60,8 +60,8 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 {
 	private _counter = _x;
 	private _act = 1;
-	if (_x in ["o_mech_inf", "o_armor"]) then {_act = 2};
-	if (_x in ["o_motor_inf", "o_recon"]) then {_act = 3};
+	if (_x in ["o_mech_inf", "o_armor", "o_antiair"]) then {_act = 2};
+	if (_x in ["o_motor_inf", "o_recon", "o_support"]) then {_act = 3};
 	private _sorted = [
 		HEX_GRID, 
 		[], 
@@ -99,11 +99,23 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 	_marker setMarkerSize [HEX_SIZE, HEX_SIZE];
 }forEach HEX_GRID;
 
-/// Globalize the grid
+/// Randomize Weather
+	
+private _weather = [];
+for "_i" from 1 to 6 do {
+	private _newWeather = HEX_ALLWEATHER select floor random count HEX_ALLWEATHER;
+	_weather append [_newWeather];
+};
+
+HEX_WEATHER = _weather;
+
+/// Globalize variables
+publicVariable "HEX_SIZE";
 publicVariable "HEX_GRID";
+publicVariable "HEX_TURN";
+publicVariable "HEX_PHASE";
+publicVariable "HEX_TIME";
+publicVariable "HEX_WEATHER";
 
 /// Zone of Control on grid
 0 call HEX_FNC_ZOCO;
-
-/// Update counters on clients:
-remoteExec ["HEX_FNC_COTE", 0, false];

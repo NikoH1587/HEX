@@ -1,7 +1,31 @@
+waitUntil {!isNil "HEX_GRID" && !isNil "HEX_FNC_COTE"};
+
+/// Update counters locally
+0 spawn HEX_FNC_COTE;
+
 openmap true;
 LOC_MODE = "SELECT"; /// "SELECT", "ORDER";
 LOC_ORDERS = [];
 LOC_SELECT = [];
+LOC_COMMANDER = false;
+
+if (player == OFFICER_WEST) then {LOC_COMMANDER = true};
+if (player == OFFICER_EAST) then {LOC_COMMANDER = true};
+
+LOC_SOUNDS = [
+"a3\dubbing_radio_f\sfx\in2a.ogg",
+"a3\dubbing_radio_f\sfx\in2b.ogg",
+"a3\dubbing_radio_f\sfx\in2c.ogg",
+"a3\dubbing_radio_f\sfx\out2a.ogg",
+"a3\dubbing_radio_f\sfx\out2b.ogg",
+"a3\dubbing_radio_f\sfx\out2c.ogg"
+];
+
+LOC_RADIO = [
+"a3\dubbing_radio_f\sfx\radionoise1.ogg",
+"a3\dubbing_radio_f\sfx\radionoise2.ogg",
+"a3\dubbing_radio_f\sfx\radionoise3.ogg"
+];
 
 LOC_FNC_SELECT = {
 	private _selectable = [];
@@ -73,6 +97,10 @@ LOC_FNC_ORDER = {
 			
 			/// Send move to server
 			[LOC_SELECT, _hex] remoteExec ["HEX_FNC_MOVE", 2, false];
+			
+			/// Play sound
+			private _sound = LOC_SOUNDS select floor random count LOC_SOUNDS;
+			playSoundUI [_sound, 1, random 1];
 		};
 	}forEach LOC_ORDERS;
 	
@@ -83,16 +111,17 @@ LOC_FNC_ORDER = {
 /// Sound effect
 LOC_FNC_EFFECT = {
 	
-	private _sound = HEX_SOUNDS select floor random count HEX_SOUNDS;
-	private _radio = HEX_RADIO select floor random count HEX_RADIO;
+	private _sound = LOC_SOUNDS select floor random count LOC_SOUNDS;
+	private _radio = LOC_RADIO select floor random count LOC_RADIO;
 	private _pitch = random 1;
 	playSoundUI [_sound, 1, random 1];
 	LOC_SOUND = playSoundUI [_radio, 2 - _pitch, _pitch];
 };
 
 LOC_FNC_ENDTURN = {
-	hint str "TURN ENDED";
-	/// update info boxes?
+	if (side player == HEX_TURN && LOC_COMMANDER) then {
+		remoteExec ["HEX_FNC_TURN", 2, false];
+	};
 };
 
 /// Open menu
@@ -115,16 +144,15 @@ LOC_FNC_ENDTURN = {
 			};
 
 			_time ctrlSetBackgroundColor _color;
-			_weather ctrlSetBackgroundColor _color;
 			_turn ctrlSetBackgroundColor _color;
 			
 			/// Command
 			onMapSingleClick {
-				if (LOC_MODE == "SELECT") then {
+				if (LOC_MODE == "SELECT" && LOC_COMMANDER && side player == HEX_TURN) then {
 					_pos spawn LOC_FNC_SELECT;
 				};
 	
-				if (LOC_MODE == "ORDER") then {
+				if (LOC_MODE == "ORDER" && LOC_COMMANDER && side player == HEX_TURN) then {
 					_pos spawn LOC_FNC_ORDER;
 				};
 				true;
@@ -136,7 +164,6 @@ LOC_FNC_ENDTURN = {
 			private _menu = findDisplay 1300;
 			private _info = _menu displayCtrl 1301;
 			private _time = _menu displayCtrl 1302;
-			private _weather = _menu displayCtrl 1303;
 			private _turn = _menu displayCtrl 1304;
 			
 			if (HEX_TURN == west) then {
@@ -147,10 +174,11 @@ LOC_FNC_ENDTURN = {
 				_info ctrlSetText "OPFOR TURN";
 			};
 			
-			_time ctrlSetText ((HEX_TIME select 0) + " (" + (HEX_TIME select 1) + ">" + (HEX_TIME select 2) + ">"  + (HEX_TIME select 3) + ")");
-			_weather ctrlSetText ((HEX_WEATHER select 0) + " (" + (HEX_WEATHER select 1) + ">" + (HEX_WEATHER select 2) + ">"  + (HEX_WEATHER select 3) + ")");
+			private _timeTEXT = HEX_TIME select 1;
+			if (_timeTEXT in ["DAY1", "DAY2", "DAY3"]) then {_timeTEXT = "DAY"};
+			_time ctrlSetText ("D+" + str HEX_DAY + " - " + _timeTEXT + " - " + (HEX_WEATHER select 1));
 			
-			if (side player == HEX_TURN) then {
+			if (side player == HEX_TURN && LOC_COMMANDER) then {
 				_turn ctrlSetText "END TURN";
 			} else {
 				_turn ctrlSetText "WAITING...";	

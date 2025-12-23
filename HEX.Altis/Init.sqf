@@ -5,15 +5,37 @@ if (isServer) then {
 	call compile preprocessFile "HEX\Server\Grid.sqf";
 };
 
-sleep 1;
-removeSwitchableUnit OFFICER_EAST;
-removeSwitchableUnit LEADER_EAST;
-removeSwitchableUnit SOLDIER_EAST;
 ///teamSwitch;
 call compile preprocessFile "HEX\Local\Strategic.sqf";
 call compile preprocessFile "HEX\Local\Ambient.sqf";
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
+
+/// Description;
+///
+/// HEX is a persistent mission, where real-time battles are generated from hex&counter wargame system.
+/// Playable in singleplayer, COOP against HEX_AI, or hosted PVP multiplayer.
+/// Customizable factions (DLC or mod) with freedom of forces scale, ratio and composition.
+///
+/// Players can choose the role of Commander, Leaders or Soldiers.
+/// Commander dictates strategic actions on hex board, and tactics with High Command interface.
+/// Leaders put Commander's orders in action, with a squad of Soldiers in real-time combat.
+///
+/// Campaign is split in multiple two-part phases, with progressing time and weather:
+/// Strategic phase: Turn-based manouvers of counters on strategic hex-board.
+/// Tactical phase: Connected counters are played out in real-time battle.
+///
+/// Counters are divided in two types: Primary and Auxiliary.
+/// Primary (Infantry, Motorized, Mechanized, Armored, Recon) spawn tactical groups.
+/// Auxiliary (Artillery, Support, Aircraft, Helicopters, Anti-Air) spawn strategic units.
+///
+/// Victory over enemy counters is achieved by capture of area in tactical battle.
+/// Counters captured will be initially disorginized, and ultimately destroyed.
+/// Campaign victory is achieved by destroying enemy Headquarters counter.
+///
+/// Copyright: Arma Public Licence (APL)
+
+/// TBD: End scenario with casualities list
 
 /// Zero Menu:
 /// Title, Author, Version

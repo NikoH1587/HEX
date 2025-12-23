@@ -21,20 +21,11 @@ class HEX_STRATEGIC {
 			h = 1.5 * GUI_GRID_CENTER_H;
 		};
 		
-		class Weather: RscText
-		{
-			idc = 1303;
-			x = GUI_GRID_TOPCENTER_X + 15 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_TOPCENTER_Y + 3 * GUI_GRID_CENTER_H;
-			w = 10 * GUI_GRID_CENTER_W;
-			h = 1.5 * GUI_GRID_CENTER_H;
-		};
-		
 		class Turn: RscButton
 		{
 			idc = 1304;
 			x = GUI_GRID_TOPCENTER_X + 15 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_TOPCENTER_Y + 4.5 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_TOPCENTER_Y + 3 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 1.5 * GUI_GRID_CENTER_H;
 			onButtonClick = "[] call LOC_FNC_ENDTURN;";
