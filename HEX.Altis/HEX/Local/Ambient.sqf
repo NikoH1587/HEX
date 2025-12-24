@@ -32,12 +32,12 @@ AMB_COMBAT = [
 
 /// play ambient radio sounds
 0 spawn {
-	while {HEX_PHASE == "STRATEGIC"} do {
+	while {HEX_PHASE == "STRATEGIC" or HEX_PHASE == "BRIEFING"} do {
 		private _delay = 5;
 		if (HEX_INTENSITY > 0) then {
 			_delay = 10 + (random 5);
 			private _radio = AMB_RADIO select floor random count AMB_RADIO;
-			playSoundUI [_radio, 0.1];
+			playSoundUI [_radio, 0.5];
 		};
 		sleep _delay;
 	};
@@ -45,12 +45,12 @@ AMB_COMBAT = [
 
 /// play ambient combat sounds
 0 spawn {
-	while {HEX_PHASE == "STRATEGIC"} do {
+	while {HEX_PHASE == "STRATEGIC" or HEX_PHASE == "BRIEFING"} do {
 		private _delay = 5;
 		if (HEX_INTENSITY > 1) then {
 			_delay = 10 + (random 5);
 			private _combat = AMB_COMBAT select floor random count AMB_COMBAT;
-			playSoundUI [_combat, 0.1];
+			playSoundUI [_combat, 0.5];
 		};
 		sleep _delay;
 	};

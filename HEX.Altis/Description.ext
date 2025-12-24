@@ -1,6 +1,7 @@
 #include "\a3\ui_f\hpp\defineCommonGrids.inc"
 #include "HEX\Global\Import.hpp"
 #include "HEX\Local\Strategic.hpp"
+#include "HEX\Local\Briefing.hpp"
 
 respawn = "BASE";
 respawnDelay = 10;

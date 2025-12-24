@@ -20,7 +20,7 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 		private _landT = !(surfaceisWater [_x, _y + (HEX_SIZE / 2)]);
 		{if (_x == true) then {_land = true}}forEach [_landL, _landR, _landB, _landT];
         if (_land) then {
-			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 1];
+			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0];
 		};
     };
 };
@@ -55,6 +55,7 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 	_hex set [3, _counter];
 	_hex set [4, west];
 	_hex set [5, _act];
+	_hex set [6, 1];
 }forEach HEX_CFG_WEST;
 
 {
@@ -83,6 +84,7 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 	_hex set [3, _counter];
 	_hex set [4, east];
 	_hex set [5, _act];
+	_hex set [6, 1];
 }forEach HEX_CFG_EAST;
 
 /// Create grid overlay

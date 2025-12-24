@@ -39,13 +39,13 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 
 /// Zero Menu:
 /// Title, Author, Version
-/// Cool picture?
+/// Cool picture
 /// Description List
 /// "WAITING FOR HOST" text?
 
 /// First Menu:
 /// Title, Author, Version
-/// Cool picture?
+/// Cool picture
 /// Continue Campaign / Default Campaign
 /// New Campaign
 
@@ -61,14 +61,23 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 /// Third Menu:
 /// Turn info
 /// End Turn
-/// Time
-/// Weather forecast
 
 /// Fourth menu:
 /// Tactical Briefing
+/// "To battle!" button
 
-/// Fifth menu:
+/// Fifth Menu:
+/// Respawn / Slotting screen
+/// strole variable in group with spawning icon
+/// On player dead switch back to ghost unit
+
+/// Spawn reinforcements to slot into (total 10 units) / side ????
+/// if count units _side < 10 then (exc. ghosts) spawn group... ???
+
+/// Sixth menu:
 /// Tactical Debriefing
+/// "Save & Continue" button
+/// "Save & Exit" button
 
 /// Player respawn:
 /// Create respawn west/ respawn east markers

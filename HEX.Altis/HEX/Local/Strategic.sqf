@@ -115,7 +115,7 @@ LOC_FNC_EFFECT = {
 	private _radio = LOC_RADIO select floor random count LOC_RADIO;
 	private _pitch = random 1;
 	playSoundUI [_sound, 1, random 1];
-	LOC_SOUND = playSoundUI [_radio, 2 - _pitch, _pitch];
+	LOC_SOUND = playSoundUI [_radio, 3 - _pitch, _pitch];
 };
 
 LOC_FNC_ENDTURN = {
@@ -170,7 +170,7 @@ LOC_FNC_ENDTURN = {
 				_info ctrlSetBackgroundColor [0, 0.3, 0.6, 0.5];
 				_info ctrlSetText "BLUFOR TURN";
 			} else {
-				_info ctrlSetBackgroundColor [0.5, 0, 0, 0.5];	
+				_info ctrlSetBackgroundColor [0.5, 0, 0, 0.5];
 				_info ctrlSetText "OPFOR TURN";
 			};
 			
