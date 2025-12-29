@@ -125,3 +125,5 @@ if (_netMode == "Dedicated") then {
 
 /// Sources used: 
 /// https://www.youtube.com/watch?v=kDFAHoxdL4Y&list=PLrFF_4LjPgISFZ6TzRi82O153ZQp5H-TJ
+/// picture of military map case:
+/// https://commons.wikimedia.org/wiki/File:US_map_case_-_National_World_War_I_Museum_-_Kansas_City,_MO_-_DSC07730.JPG

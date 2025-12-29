@@ -16,7 +16,7 @@ class HEX_SLOTTING
 	};
 
 	class Controls
-	{			
+	{
 		class Title : RscText
 		{
 			text = "CHOOSE UNIT TO CONTROL:";

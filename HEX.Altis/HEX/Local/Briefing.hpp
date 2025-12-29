@@ -9,14 +9,14 @@ class HEX_BRIEFING
 			idc = -1;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
-			w = 20 * GUI_GRID_CENTER_W;
+			w = 40 * GUI_GRID_CENTER_W;
 			h = 24 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0.1,0.1,0.1,1};
 		};
 	};
 
 	class Controls
-	{			
+	{
 		class Text : RscText
 		{
 			text = "TACTICAL BRIEFING";

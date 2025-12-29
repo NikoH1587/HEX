@@ -16,8 +16,7 @@ class HEX_LOADING
 	};
 
 	class Controls
-	{		
-
+	{
 		class Continue: RscButton
 		{
 			idc = 1101;
