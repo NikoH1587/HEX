@@ -28,19 +28,26 @@ if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
 /// ToDo:
+///
+/// Make magic support vehicle
+/// make do repair, rearm, refuel, medical and place infantry ammo in cargo
+/// setFuelCargo 0, setAmmoCargo 0, setRepairCargo 0
+///
+/// Each counter represents a company
+/// In-game actually spawns just a platoon
+/// Company is simulated with platoon's reinforcements (also unit's hitpoints)
+///
+/// Make each "Company" (Platoon) counter customiable
+///
+/// Change strategic time steps to 1 hour
+/// More "dynamic" weather
+/// Value that goes up / down?
+///
 /// Move functions to functions library
 /// https://community.bistudio.com/wiki/Arma_3:_Functions_Library
 ///
-/// make changes to onPLayerKilled event handler
-/// Open slotting / switching menu
 ///
 /// Fix stuff if game is loaded from save (This file mostly?)
-///
-/// Add texture to menus, oversized texture of a map case, with some kind of grided paper + stains?
-/// 
-/// Replace Strategic layer janky map overlay with just a GUI map? but then no funni markers :<
-/// 
-/// random reinforcements on every day ?
 ///
 /// "AI Commander" places markers on map of enemy units etc on side channel
 /// alternatively: radio sidechat messages?
@@ -110,8 +117,6 @@ if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
 /// Fifth Menu: /// "TACTICAL"
 /// Respawn / Slotting screen
 
-/// Spawn reinforcements to slot into (total 10 units) / side ????
-/// if count units _side < 10 then (exc. ghosts) spawn group... ???
 
 /// Sixth menu: /// "DEBRIEFING"
 /// Tactical Debriefing
@@ -120,5 +125,7 @@ if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
 
 /// Sources used: 
 /// https://www.youtube.com/watch?v=kDFAHoxdL4Y&list=PLrFF_4LjPgISFZ6TzRi82O153ZQp5H-TJ
+/// https://fieldgradeleader.themilitaryleader.com/wp-content/uploads/2017/10/2017-07-The-Russian-Way-of-War-Grau-and-Bartles-The-Defense.pdf
+/// https://en.wikipedia.org/wiki/Military_organization
 /// picture of military map case:
 /// https://commons.wikimedia.org/wiki/File:US_map_case_-_National_World_War_I_Museum_-_Kansas_City,_MO_-_DSC07730.JPG

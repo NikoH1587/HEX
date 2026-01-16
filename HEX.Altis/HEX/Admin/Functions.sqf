@@ -32,12 +32,12 @@ HEX_ADM_FNC_NEWSAVE = {
 
 HEX_ADM_FNC_CMDW = {
 	HEX_ADM_WEST_COMMANDER = HEX_ADM_WEST_PLAYERS select _this;
-	publicVariable "ADM_WEST_COMMANDER";
+	publicVariable "HEX_ADM_WEST_COMMANDER";
 };
 
 HEX_ADM_FNC_CMDE = {
 	HEX_ADM_EAST_COMMANDER = HEX_ADM_EAST_PLAYERS select _this;
-	publicVariable "ADM_EAST_COMMANDER";
+	publicVariable "HEX_ADM_EAST_COMMANDER";
 };
 
 /// Start tactical combat
@@ -167,17 +167,17 @@ HEX_ADM_FNC_FACWEST = {
 	lbClear _selWest;
 	HEX_CFG_WEST = ["b_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support 3x", "b_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery 1x", "b_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air 1x", "b_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane 1x", "b_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter 1x", "b_air"]};
+	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support Company", "b_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery Battery", "b_art"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air Battery", "b_antiair"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane Squadron", "b_plane"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter Squadron", "b_air"]};
 	
-	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Infantry 9x", "b_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Recon 6x", "b_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Motorized 6x", "b_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Mechanized 3x", "b_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Armor 3x", "b_armor"]};
+	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Infantry Company", "b_inf"]};
+	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Recon Company", "b_recon"]};
+	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Motorized Company", "b_motor_inf"]};
+	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Mechanized Company", "b_mech_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Armor Company", "b_armor"]};
 	
 	{
 		private _added = _listWest lbAdd (_x select 0);
@@ -187,7 +187,7 @@ HEX_ADM_FNC_FACWEST = {
 	}forEach HEX_ADM_CFG_WEST;
 	
 	/// add HQ to selected list
-	private _addHQ = _selWest lbAdd "Headquarters";
+	private _addHQ = _selWest lbAdd "Batallion Headquarters";
 	_selWest lbSetPicture [_addHQ, "\A3\ui_f\data\map\markers\nato\b_hq.paa"];
 	_selWest lbSetPictureColor [_addHQ, [0, 0.3, 0.6, 1]];
 };
@@ -209,17 +209,17 @@ HEX_ADM_FNC_FACEAST = {
 	lbClear _selEast;
 	HEX_CFG_EAST = ["o_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support 3x", "o_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Artillery 1x", "o_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air 1x", "o_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Plane 1x", "o_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter 1x", "o_air"]};
+	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support Company", "o_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Artillery Battery", "o_art"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air Battery", "o_antiair"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Plane Squadron", "o_plane"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter Squadron", "o_air"]};
 	
-	if (_groups select 0) then {HEX_ADM_CFG_EAST pushBack ["Infantry 9x", "o_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Recon 6x", "o_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Motorized 6x", "o_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Mechanized 3x", "o_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Armor 3x", "o_armor"]};
+	if (_groups select 0) then {HEX_ADM_CFG_EAST pushBack ["Infantry Company", "o_inf"]};
+	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Recon Company", "o_recon"]};
+	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Motorized Company", "o_motor_inf"]};
+	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Mechanized Company", "o_mech_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Armor Company", "o_armor"]};
 	
 	{
 		private _added = _listEast lbAdd (_x select 0);
@@ -229,7 +229,7 @@ HEX_ADM_FNC_FACEAST = {
 	}forEach HEX_ADM_CFG_EAST;
 	
 	/// add HQ to selected list
-	private _addHQ = _selEast lbAdd "Headquarters";
+	private _addHQ = _selEast lbAdd "Brigade Headquarters";
 	_selEast lbSetPicture [_addHQ, "\A3\ui_f\data\map\markers\nato\o_hq.paa"];
 	_selEast lbSetPictureColor [_addHQ, [0.5, 0, 0, 1]];
 };
@@ -315,6 +315,11 @@ HEX_ADM_FNC_START = {
 	publicVariable "HEX_EAST";
 	publicVariable "HEX_CFG_WEST";
 	publicVariable "HEX_CFG_EAST";
+	
+	HEX_PLTW = 4; /// 3x respawns (Total 12 groups)
+	HEX_PLTE = 3; /// 4x respawns (Total 12 groups)
+	publicVariable "HEX_PLTW";
+	publicVariable "HEX_PLTE";
 	
 	publicVariable "HEX_FULLMAP";
 	publicVariable "HEX_SIZE";

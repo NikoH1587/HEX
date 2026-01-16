@@ -47,7 +47,7 @@ AMB_COMBAT = [
 0 spawn {
 	while {HEX_PHASE == "STRATEGIC" or HEX_PHASE == "BRIEFING"} do {
 		private _delay = 5;
-		if (HEX_INTENSITY > 1) then {
+		if (HEX_INTENSITY > 2) then {
 			_delay = 10 + (random 5);
 			private _combat = AMB_COMBAT select floor random count AMB_COMBAT;
 			playSoundUI [_combat, 0.5];
@@ -55,7 +55,3 @@ AMB_COMBAT = [
 		sleep _delay;
 	};
 };
-
-/// TBD;
-/// "Static" screen effect on intesity 1
-/// "Glitsch" screen effect on intensity 2

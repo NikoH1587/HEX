@@ -15,7 +15,6 @@ HEX_SRV_FNC_GRID = {
 		private _row = _x select 0;
 		private _col = _x select 1;
 		private _pos = _x select 2;
-		private _sid = _x select 4;
 		private _name = format ["HEX_%1_%2", _row, _col];
 		private _marker = createMarker [_name, _pos];
 		_marker setMarkerShape "HEXAGON";
@@ -40,7 +39,7 @@ HEX_SRV_FNC_MOVE = {
 	HEX_GRID set [_indexORG, _newORG];
 	
 	/// Replace destination with origin
-	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6, _org select 7];
+	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6];
 	HEX_GRID set [_indexEND, _newEND];
 	
 	/// Update grid information globally
@@ -62,7 +61,11 @@ HEX_SRV_FNC_ZOCO = {
 		private _hex = _x;
 		private _row = _x select 0;
 		private _col = _x select 1;
+		private _pos = _x select 2;
+		private _cfg = _x select 3;
 		private _sid = _x select 4;
+		private _act = _x select 5;
+		private _org = _x select 6;
 	
 		private _near = _hex call HEX_GLO_FNC_NEAR;
 		private _sides = [_sid];
@@ -73,9 +76,13 @@ HEX_SRV_FNC_ZOCO = {
 		private _color = "colorBLACK";
 		if (west in _sides) then {_color = "colorBLUFOR"};
 		if (east in _sides) then {_color = "colorOPFOR"};
-		if (west in _sides && east in _sides) then {_color = "ColorCIV"; _Intensity = _Intensity + 1};
+		if (west in _sides && east in _sides) then {
+			_color = "ColorCIV"; 
+			_Intensity = _Intensity + 1;
+			_sid = resistance;
+		};
 	
-		private _newHEX = [_x select 0, _x select 1, _x select 2, _x select 3, _x select 4, _x select 5, _x select 6, _color];
+		private _newHEX = [_row, _col, _pos, _cfg, _sid, _act, _org];
 		HEX_GRID set [_forEachIndex, _newhex];
 	
 		private _marker = format ["HEX_%1_%2", _row, _col];
@@ -89,10 +96,7 @@ HEX_SRV_FNC_ZOCO = {
 		};
 	}forEach HEX_GRID;
 	
-	private _ambience = 0;
-	if (_intensity > 3) then {_ambience = 1};
-	if (_intensity > 6) then {_ambience = 2};
-	HEX_INTENSITY = _ambience;
+	HEX_INTENSITY = _intensity;
 	publicVariable "HEX_GRID";
 	publicVariable "HEX_INTENSITY";
 };
@@ -196,30 +200,12 @@ HEX_SRV_FNC_VEHICLES = {
 			if (_sim == "soldier") then {_men pushback _cfg};
 			if (_typ == 0 && _dsp == "Officer") then {_configs pushback _cfg};	
 			if (_typ == 1 && _art > 0) then {_configs pushback _cfg};			
-			if (_typ == 2 && _amo > 0) then {_reammo pushbackUnique _cfg};
-			if (_typ == 2 && _rep > 0) then {_repair pushbackUnique _cfg};
-			if (_typ == 2 && _plo > 0) then {_refuel pushbackUnique _cfg};
-			
+			if (_typ == 2 && _sup > 0) then {_configs pushback _cfg};
 			if (_typ == 3 && _cat == "EdSubcat_AAs") then {_configs pushback _cfg};
 			if (_typ == 4 && _sup == 0 && _sim == "helicopterrtd" or _sim == "helicopterx") then {_configs pushback _cfg};
 			if (_typ == 5 && _sim == "airplanex" or _sim == "airplane") then {_configs pushback _cfg};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));
-
-	private _icons = ["b_support", "b_maint", "b_service"];
-	if (_side == east) then {_icons = ["o_support", "o_maint", "o_service"]};
-	/// add 3 random support vehicles
-	if (_typ == 2) then {
-		_configs = [];
-		
-		private _reammoVeh = _reammo select floor random count _reammo;
-		private _repairVeh = _repair select floor random count _repair;
-		private _refuelVeh = _refuel select floor random count _refuel;
-		
-		_configs pushBackUnique _reammoVeh;
-		_configs pushBackUnique _repairVeh;
-		_configs pushBackUnique _refuelVeh;
-	};
 
 	/// if no configs, pick random man
 	if (count _configs == 0) then {_configs = [_men select floor random count _men]};
@@ -234,7 +220,7 @@ HEX_FNC_SRV_SPAWNGROUP = {
 	private _config = _this select 2;
 
 	private _group = createGroup _side;
-	private _pos = [[[_hexpos, HEX_SIZE / 2]], ["water"]] call BIS_fnc_randomPos;
+	private _pos = [[[_hexpos, HEX_SIZE]], ["water"]] call BIS_fnc_randomPos;
 	
 	private _infantry = [];
 	private _vehicles = [];
@@ -288,7 +274,7 @@ HEX_FNC_SRV_SPAWNVEHICLE = {
 	private _side = _this select 1;
 	private _config = _this select 2;
 
-	private _pos = [_pos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
+	private _pos = [_pos, 0, HEX_SIZE, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
 	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
 	private _crew = _spawned select 1;
 	private _group = _spawned select 2;

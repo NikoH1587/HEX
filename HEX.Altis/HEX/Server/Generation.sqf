@@ -22,13 +22,16 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 		private _landT = !(surfaceisWater [_x, _y + (HEX_SIZE / 2)]);
 		{if (_x == true) then {_land = true}}forEach [_landL, _landR, _landB, _landT];
         if (_land) then {
-			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0, "colorBLACK"];
+			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0];
 		};
     };
 };
 
 /// Select positon and restrict grid with fill, ignore if fullmap mode is on;
 if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_GLO_FNC_FILL};
+
+/// create grid overlay markers
+0 call HEX_SRV_FNC_GRID;
 
 {
 	private _counter = _x;

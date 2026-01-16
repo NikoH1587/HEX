@@ -3,31 +3,22 @@
 private _tactical = [];
 {
 	private _hex = _x;
-	private _row = _x select 0;
-	private _col = _x select 1;
-	private _pos = _x select 2;
-	private _cfg = _x select 3;
 	private _sid = _x select 4;
-	private _act = _x select 5;
-	private _org = _x select 6;
 	
 	private _near = _hex call HEX_GLO_FNC_NEAR;
 	private _sides = [_sid];
-		
+
 	{
-		_sides pushback (_x select 4);
+		private _sid2 = _x select 4;
+		_sides pushback _sid2;
 	}forEach _near;
 
-	private _isTac = true;
-	if (_cfg in ["b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isTac = false};
-	if (_cfg in ["o_art", "o_support", "o_air", "o_plane", "o_antiair"]) then {_isTac = false};
-
-	if (_sid != civilian && west in _sides && east in _sides && _isTac) then {
+	if (resistance in _sides) then {
 		_tactical pushback _hex;
 	};
 }forEach HEX_GRID;
 
-/// counters that are of strategic type, not in tactical already go in strategic array
+/// counters of strategic type and next to active are auxiliary/reserves
 private _strategic = [];
 
 {
@@ -41,9 +32,10 @@ private _strategic = [];
 	private _org = _x select 6;
 	
 	private _isStrat = false;
-	if (_cfg in ["b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isStrat = true};
-	if (_cfg in ["o_art", "o_support", "o_air", "o_plane", "o_antiair"]) then {_isStrat = true};
+	if (_cfg in ["b_hq", "b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isStrat = true};
+	if (_cfg in ["o_hq", "o_art", "o_support", "o_air", "o_plane", "o_antiair"]) then {_isStrat = true};
 	
+	private _near = _hex call HEX_GLO_FNC_NEAR;
 	if (_isStrat) then {
 		_strategic pushback _hex;
 	};

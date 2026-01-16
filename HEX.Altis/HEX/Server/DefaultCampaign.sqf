@@ -1,5 +1,5 @@
 /// Default variables
-HEX_SIZE = 1000;
+HEX_SIZE = 750;
 HEX_PHASE = "STRATEGIC";
 HEX_SCENARIO = ["W", "E", "N", "S"] select floor random 4;
 HEX_TIME = ["NIGHT", "DAWN", "DAY1", "DAY2", "DAY3", "DUSK"] select floor random 6;
@@ -7,6 +7,8 @@ HEX_DAY = 0;
 HEX_TURN = [west, east] select floor random 2;
 HEX_WEST = "BLU_F";
 HEX_EAST = "OPF_F";
+HEX_PLTW = 4; /// 3x respawns (Total 12 groups)
+HEX_PLTE = 3; /// 4x respawns (Total 12 groups)
 HEX_FULLMAP = false;
 
 /// Create random west counters
@@ -45,9 +47,6 @@ publicVariable "HEX_PHASE";
 
 /// generate grid, counters & weather
 call compile preprocessFile "HEX\Server\Generation.sqf";
-
-/// create grid overlay
-0 call HEX_SRV_FNC_GRID;
 
 /// update zone of control
 0 call HEX_SRV_FNC_ZOCO;

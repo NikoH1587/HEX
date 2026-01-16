@@ -3,9 +3,6 @@
 /// generate grid, counters & weather
 call compile preprocessFile "HEX\Server\Generation.sqf";
 
-/// create grid overlay
-0 call HEX_SRV_FNC_GRID;
-
 /// update zone of control
 0 call HEX_SRV_FNC_ZOCO;
 

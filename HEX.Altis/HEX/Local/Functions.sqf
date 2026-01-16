@@ -51,21 +51,19 @@ HEX_LOC_FNC_COTE = {
 		private _near = _hex call HEX_GLO_FNC_NEAR;
 		{
 			private _sid2 = _x select 4;
-			if (_sid2 == side player) then {
+			if (_sid2 == resistance) then {
 				_draw = true;
 			};
-		}forEach _near;
+		}forEach _near;	
 	
 		if (_draw == true && _cfg != "hd_dot") then {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _cfg;
 			if (_org < 0.5) then {_marker setMarkerAlphaLocal 0.5};
-			if (_sid == side player && _act > 0) then {
-				if (_act == 1) then {_marker setMarkerTextLocal ("I")};
-				if (_act == 2) then {_marker setMarkerTextLocal ("II")};
-				if (_act == 3) then {_marker setMarkerTextLocal ("III")};
+			if (_act == 1) then {_marker setMarkerTextLocal ("I")};
+			if (_act == 2) then {_marker setMarkerTextLocal ("II")};
+			if (_act == 3) then {_marker setMarkerTextLocal ("III")};
 			};
-		};
 	}forEach HEX_GRID;
 };
 
@@ -134,8 +132,9 @@ HEX_LOC_FNC_SELECT = {
 			private _near = _hex call HEX_GLO_FNC_NEAR;
 			{
 				private _nearHEX = _x;
+				private _cfg = _x select 3;
 				private _side = _x select 4;
-				if (_side == civilian) then {
+				if (_side != resistance && _cfg == "hd_dot") then {
 					HEX_LOC_ORDERS pushback _nearHEX;
 				};
 			}forEach _near;

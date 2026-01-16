@@ -4,7 +4,7 @@ HEX_DAY = 0;
 (findDisplay 1100) closedisplay 1;
 
 HEX_FULLMAP = false;
-HEX_SIZE = 1000;
+HEX_SIZE = 750;
 HEX_WEST = "BLU_F"; /// faction name for spawning
 HEX_EAST = "OPF_F";
 

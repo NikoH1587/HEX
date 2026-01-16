@@ -56,3 +56,44 @@
 		/// TODO: PERFORMANCE TESTING
 		_group addWaypoint [_pos, HEX_SIZE / 2];
 	};
+	
+/// Create subgrid overlay on server
+HEX_SRV_FNC_SUBGRID = {
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+		private _idx = _x select 2;
+		private _pos = _x select 3;
+		private _name = format ["HEX_%1_%2_%3", _row, _col, _idx];
+		private _marker = createMarker [_name, _pos];
+		_marker setMarkerShape "HEXAGON";
+		_marker setMarkerBrush "Border";
+		_marker setMarkerDir 90;
+		_marker setMarkerSize [HEX_SIZE / 4, HEX_SIZE / 4];
+	}forEach HEX_SUBGRID;
+};
+
+/// create sub-grid
+{
+	private _row = _x select 0;
+	private _col = _x select 1;
+	private _pos = _x select 2;
+	private _marker = format ["HEX_%1_%2", _row, _col];
+	private _types = ["NameCityCapital","NameCity","NameVillage","NameLocal","Hill"];
+	private _locs = nearestLocations [_pos, _types, HEX_SIZE];
+	private _posLocs = [];
+	
+	{
+		private _posLoc = position _x;
+		if (_posLoc inArea _marker) then {
+			_posLocs pushback [_posLoc select 0, _posLoc select 1];
+		}
+	}forEach _locs;
+	
+	{
+		private _pos2 = _x;
+		private _idx = _forEachIndex;
+		HEX_SUBGRID pushback [_row, _col, _idx, _pos2, "hd_dot", civilian, 0, 0, "colorBLACK"];
+	}forEach _posLocs;
+}forEach HEX_GRID;	
+	
