@@ -22,7 +22,12 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 		private _landT = !(surfaceisWater [_x, _y + (HEX_SIZE / 2)]);
 		{if (_x == true) then {_land = true}}forEach [_landL, _landR, _landB, _landT];
         if (_land) then {
-			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0];
+			private _alpha = 0.33;
+		
+			private _locs = nearestLocation [[_x,_y], ["hill", "NameCityCapital", "NameCity", "NameVillage", "NameLocal"], HEX_SIZE];
+
+			if (isNull _locs == false) then {_alpha = 0.66};
+			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0, _alpha];
 		};
     };
 };
@@ -39,6 +44,9 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	if (_x in ["b_inf", "b_hq", "b_art"]) then {_act = 1};
 	if (_x in ["b_mech_inf", "b_armor", "b_antiair"]) then {_act = 2};
 	if (_x in ["b_motor_inf", "b_recon", "b_support"]) then {_act = 3};
+	
+	private _org = 12;
+	if (_x in ["b_hq", "b_antiair", "b_support", "b_hq", "b_art", "b_air", "b_plane"]) then {_org = 3};
 	private _sorted = [
 		HEX_GRID, 
 		[], 
@@ -60,7 +68,7 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	_hex set [3, _counter];
 	_hex set [4, west];
 	_hex set [5, _act];
-	_hex set [6, 1];
+	_hex set [6, _org];
 }forEach HEX_CFG_WEST;
 
 {
@@ -69,6 +77,10 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	if (_x in ["o_inf", "o_hq", "o_art"]) then {_act = 1};
 	if (_x in ["o_mech_inf", "o_armor", "o_antiair"]) then {_act = 2};
 	if (_x in ["o_motor_inf", "o_recon", "o_support"]) then {_act = 3};
+	
+	private _org = 12;
+	if (_x in ["o_hq", "o_antiair", "o_support", "o_hq", "o_art", "o_air", "o_plane"]) then {_org = 3};
+	
 	private _sorted = [
 		HEX_GRID, 
 		[], 
@@ -90,7 +102,7 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	_hex set [3, _counter];
 	_hex set [4, east];
 	_hex set [5, _act];
-	_hex set [6, 1];
+	_hex set [6, _org];
 }forEach HEX_CFG_EAST;
 
 /// Randomize Weather

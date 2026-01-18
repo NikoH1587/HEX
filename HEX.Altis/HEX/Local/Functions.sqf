@@ -59,10 +59,15 @@ HEX_LOC_FNC_COTE = {
 		if (_draw == true && _cfg != "hd_dot") then {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _cfg;
-			if (_org < 0.5) then {_marker setMarkerAlphaLocal 0.5};
-			if (_act == 1) then {_marker setMarkerTextLocal ("I")};
-			if (_act == 2) then {_marker setMarkerTextLocal ("II")};
-			if (_act == 3) then {_marker setMarkerTextLocal ("III")};
+			private _orgText = "I";
+
+			if (_org > 4) then {_orgtext = "II"};		
+			if (_org > 8) then {_orgtext = "III"};
+
+			if (_act == 0) then {_marker setMarkerTextLocal (_orgtext)};
+			if (_act == 1) then {_marker setMarkerTextLocal (_orgtext + " >")};
+			if (_act == 2) then {_marker setMarkerTextLocal (_orgtext + " >>")};
+			if (_act == 3) then {_marker setMarkerTextLocal (_orgtext + " >>>")};
 			};
 	}forEach HEX_GRID;
 };

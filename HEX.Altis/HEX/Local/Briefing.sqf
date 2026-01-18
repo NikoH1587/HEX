@@ -49,24 +49,24 @@ openmap false;
 				private _pos = _x select 2;
 				private _type = _x select 3;
 				private _side = _x select 4;
-				private _state = _x select 6;
+				/// private _state = _x select 6;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Infantry Coy";
 				switch (_type select [2]) do {
-					case "hq": {_text = "Batallion Headquarters"};
-					case "art": {_text = "Artillery Battery"};
-					case "support": {_text = "Support Platoon"};
-					case "air": {_text = "Helicopter Flight"};
-					case "plane": {_text = "Plane Flight"};
-					case "antiair": {_text = "Anti-Air Battery"};
-					case "recon": {_text = "Recon Company"};
-					case "motor_inf": {_text = "Motorized Company"};
-					case "mech_inf": {_text = "Mechanized Company"};
-					case "armor": {_text = "Armor Company"};
+					case "hq": {_text = "Bgt Headquarters"};
+					case "art": {_text = "Artillery Bty"};
+					case "support": {_text = "Support Coy"};
+					case "air": {_text = "Helicopter Sqd"};
+					case "plane": {_text = "Plane Sqd"};
+					case "antiair": {_text = "Anti-Air Bty"};
+					case "recon": {_text = "Recon Coy"};
+					case "motor_inf": {_text = "Motorized Coy"};
+					case "mech_inf": {_text = "Mechanized Coy"};
+					case "armor": {_text = "Armor Coy"};
 				};
 				
 				private _alpha = 1;
-				if (_state < 0.5) then {_text = _text + "(ROUT!)"; _alpha = 0.5};
+				/// if (_state < 0.5) then {_text = _text + "(ROUT!)"; _alpha = 0.5};
 				
 				if (_side == west) then {
 					private _added = _west lbAdd _text;
@@ -90,19 +90,19 @@ openmap false;
 			{
 				private _type = _x select 3;
 				private _side = _x select 4;
-				private _state = _x select 6;
+				/// private _state = _x select 6;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Reserve";
 				switch (_type select [2]) do {
-					case "hq": {_text = "Batallion Headquarters"};
-					case "art": {_text = "Artillery Battery"};
-					case "support": {_text = "Support Platoon"};
-					case "air": {_text = "Helicopter Flight"};
-					case "plane": {_text = "Plane Flight"};
-					case "antiair": {_text = "Anti-Air Battery"};
+					case "hq": {_text = "Bgt Headquarters"};
+					case "art": {_text = "Artillery Bty"};
+					case "support": {_text = "Support Coy"};
+					case "air": {_text = "Helicopter Sqd"};
+					case "plane": {_text = "Plane Sqd"};
+					case "antiair": {_text = "Anti-Air Bty"};
 				};
 				
-				if (_state < 0.5) then {_text = _text + "(ERROR)"};
+				/// if (_state < 0.5) then {_text = _text + "(ERROR)"};
 				
 				if (_side == west) then {
 					private _added = _west lbAdd _text;

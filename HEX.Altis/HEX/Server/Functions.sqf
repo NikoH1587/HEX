@@ -15,10 +15,12 @@ HEX_SRV_FNC_GRID = {
 		private _row = _x select 0;
 		private _col = _x select 1;
 		private _pos = _x select 2;
+		private _map = _x select 7;
 		private _name = format ["HEX_%1_%2", _row, _col];
 		private _marker = createMarker [_name, _pos];
 		_marker setMarkerShape "HEXAGON";
-		_marker setMarkerBrush "Border";
+		_marker setMarkerBrush "SolidBorder";
+		_marker setMarkerAlpha _map;
 		_marker setMarkerDir 90;
 		_marker setMarkerSize [HEX_SIZE, HEX_SIZE];
 	}forEach HEX_GRID;
@@ -35,11 +37,11 @@ HEX_SRV_FNC_MOVE = {
 	private _indexEND = HEX_GRID find _end;	
 	
 	/// Replace origin with "hd_dot", civilian, 0
-	_newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 1, "colorBLACK"];
+	_newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 0, _org select 7];
 	HEX_GRID set [_indexORG, _newORG];
 	
 	/// Replace destination with origin
-	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6];
+	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6, _end select 7];
 	HEX_GRID set [_indexEND, _newEND];
 	
 	/// Update grid information globally
@@ -87,13 +89,6 @@ HEX_SRV_FNC_ZOCO = {
 	
 		private _marker = format ["HEX_%1_%2", _row, _col];
 		_marker setMarkerColor _color;
-		if (_color != "ColorBLACK") then {
-			_marker setMarkerAlpha 0.5;
-			_marker setMarkerBrush "SolidBorder";
-		} else {
-			_marker setMarkerBrush "Border";
-			_marker setMarkerAlpha 1;
-		};
 	}forEach HEX_GRID;
 	
 	HEX_INTENSITY = _intensity;
@@ -148,7 +143,7 @@ HEX_SRV_FNC_GROUPS = {
 					
 					if (_fac in _factions && (_ico in _icons or _RECnoskip or _ARMnoskip) && _INFnoskip && _SUPnoskip && (_GRPname in _blacklist == false)) then {
 						private _group = _x;
-						private _size = (count _x) min 8;
+						private _size = (count _x) min 12;
 						_grpAndSize = [_size, _group];
 						_groups append [_grpAndSize];
 					};
@@ -220,7 +215,7 @@ HEX_FNC_SRV_SPAWNGROUP = {
 	private _config = _this select 2;
 
 	private _group = createGroup _side;
-	private _pos = [[[_hexpos, HEX_SIZE]], ["water"]] call BIS_fnc_randomPos;
+	private _pos = [[[_hexpos, HEX_SIZE / 2]], ["water"]] call BIS_fnc_randomPos;
 	
 	private _infantry = [];
 	private _vehicles = [];
@@ -239,8 +234,8 @@ HEX_FNC_SRV_SPAWNGROUP = {
 	}forEach _config;
 	
 	/// Limit excessive groups
-	_infantry deleteRange [8, 16];
-	_vehicles deleteRange [2, 4];
+	_infantry deleteRange [12, 20];
+	_vehicles deleteRange [3, 6];
 	
 	{
 		(_x select 1) createUnit [_pos, _group, "", 1, (_x select 0)];	
@@ -274,7 +269,7 @@ HEX_FNC_SRV_SPAWNVEHICLE = {
 	private _side = _this select 1;
 	private _config = _this select 2;
 
-	private _pos = [_pos, 0, HEX_SIZE, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
+	private _pos = [_pos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
 	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
 	private _crew = _spawned select 1;
 	private _group = _spawned select 2;

@@ -35,9 +35,8 @@ HEX_OBJECTIVES_EAST = [];
 	if (_side == west) then {_size = HEX_PLTW};
 	if (_side == east) then {_size = HEX_PLTE};
 	
-	if (_type in ["b_inf", "o_inf"]) then {_size = _size * 2};
+	if (_type in ["b_inf", "o_inf"]) then {_size = 5};
 	
-	/// spawn some infantry even for strategic counters
 	private _armor = false;
 	private _icons = ["\A3\ui_f\data\map\markers\nato\b_inf.paa", "\A3\ui_f\data\map\markers\nato\n_inf.paa", "\A3\ui_f\data\map\markers\nato\o_inf.paa"];	
 	if (_type in ["b_recon", "o_recon"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_recon.paa", "\A3\ui_f\data\map\markers\nato\n_recon.paa", "\A3\ui_f\data\map\markers\nato\o_recon.paa"]};	
@@ -64,6 +63,8 @@ HEX_OBJECTIVES_EAST = [];
 		_group setVariable ["HEX_ID", [_row, _col, _i], true];
 	};
 
+	/// remove groups from pool
+
 }forEach HEX_TACTICAL;
 
 {
@@ -81,7 +82,9 @@ HEX_OBJECTIVES_EAST = [];
 	private _select = _configs select floor random count _configs;
 	private _group = [_pos, _side, _select] call HEX_FNC_SRV_SPAWNVEHICLE;
 	_group setVariable ["HEX_ICON", _type, true];
-	_group setVariable ["HEX_ID", [_row, _col, _i], true];
+	_group setVariable ["HEX_ID", [_row, _col, 1], true];
+	
+	/// remove unit from pool
 }forEach HEX_STRATEGIC;
 
 /// performacne testing

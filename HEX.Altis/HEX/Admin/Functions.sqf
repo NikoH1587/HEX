@@ -167,7 +167,7 @@ HEX_ADM_FNC_FACWEST = {
 	lbClear _selWest;
 	HEX_CFG_WEST = ["b_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support Company", "b_support"]};
+	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support Comapny", "b_support"]};
 	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery Battery", "b_art"]};
 	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air Battery", "b_antiair"]};
 	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane Squadron", "b_plane"]};
@@ -187,7 +187,7 @@ HEX_ADM_FNC_FACWEST = {
 	}forEach HEX_ADM_CFG_WEST;
 	
 	/// add HQ to selected list
-	private _addHQ = _selWest lbAdd "Batallion Headquarters";
+	private _addHQ = _selWest lbAdd "Brigade Headquarters";
 	_selWest lbSetPicture [_addHQ, "\A3\ui_f\data\map\markers\nato\b_hq.paa"];
 	_selWest lbSetPictureColor [_addHQ, [0, 0.3, 0.6, 1]];
 };
