@@ -12,7 +12,52 @@ VOX_FNC_DRAWMARKERS = {
 			_marker setMarkerType _unit;
 			_marker setMarkerAlpha (_morale max 0.25);
 		};
+		
+		/// updade ZOC
 	}forEach VOX_GRID;
+};
+
+VOX_FNC_CLEARMARKERS = {
+	{
+		private _pos = _x select 0;
+		private _cells = _x select 1;
+		private _unit = _x select 3;
+		private _morale = _x select 5;
+		
+		private _marker = format ["VOX_%1", _pos];
+		deleteMarker _marker;
+		
+		{
+			private _row = _x select 0;
+			private _col = _x select 1;
+			private _marker2 = format ["VOX_%1_%2", _row, _col];
+			deleteMarker _marker2;
+		}forEach _cells;
+	}forEach VOX_GRID;
+};
+
+/// strategic update
+VOX_FNC_UPDATE = {
+
+	if (VOX_DEBUG) then {((str VOX_TURN) + " TURN") call VOX_FNC_MESSAGE};
+
+	if (VOX_TURN == side player && VOX_LOC_COMMANDER) then {
+		if (VOX_LOC_MODE == "WAITING") then {side player call VOX_FNC_SELECTABLE};
+		onMapSingleClick {
+			if (VOX_LOC_MODE == "SELECT") then {
+				[_pos, side player] spawn VOX_FNC_SELECT;
+			};
+			if (VOX_LOC_MODE == "ORDER") then {
+				_pos spawn VOX_FNC_ORDER;
+			};
+			true;
+		};
+	} else {
+		onMapSingleClick {true};
+	};
+	
+	if (isServer && isPlayer CMD_WEST == false && VOX_TURN == west) then {west call VOX_FNC_AICMD};
+	if (isServer && isPlayer CMD_EAST == false && VOX_TURN == east) then {east call VOX_FNC_AICMD};
 };
 
 VOX_FNC_MOVE = {
@@ -26,6 +71,7 @@ VOX_FNC_MOVE = {
 		/// [_pos, _cells, _type, _unit, _border, _morale]
 		VOX_GRID set [_indexOld, [_old select 0, _old select 1, _old select 2, "hd_dot", _old select 4, 0]];
 		VOX_GRID set [_indexNew, [_new select 0, _new select 1, _new select 2, _old select 3, _new select 4, _old select 5]];	
+		publicVariable "VOX_GRID";
 	
 		/// switch turn
 		private _turn = east;
@@ -35,22 +81,17 @@ VOX_FNC_MOVE = {
 	
 		/// re-draw markers
 		0 call VOX_FNC_DRAWMARKERS;
-	
-		/// show turn message
-		((str VOX_TURN) + " TURN") remoteExec ["VOX_FNC_MESSAGE", 0];
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		
 	} else {
 		VOX_PHASE = "BRIEFING";
-		hint str "COMBAT!";
-		private _attacker = _old;
-		private _defender = _new;
-		private _posA = _old select 0;
-		private _posB = _new select 0;
-		private _posC = [(((_posA select 0) + (_posB select 0)) / 2),(((_posA select 1) + (_posB select 1)) / 2)];
-		mapAnimAdd [0, 0.1, _posC];
-		mapAnimCommit;
-		private _polyline = [_posA select 0, _posA select 1, _posB select 0, _posB select 1];
-		private _marker = createMarker [format ["VOX_%1_%2", _posA, _posB], _posA];
-		_marker setMarkerPolyline _polyline;
+		publicVariable "VOX_PHASE";
+		VOX_COMBAT = [_old, _new];
+		publicVariable "VOX_COMBAT";
+		0 call VOX_FNC_CLEARMARKERS;
+		["vox_briefing.sqf"] remoteExec ["execVM"]
 	};
 };
 
@@ -70,4 +111,21 @@ VOX_FNC_SOUND = {
 	
 	private _sound = _sounds select floor random count _sounds;
 	playSoundUI [_sound, 1, random 1];	
+};
+
+VOX_FNC_RADIO = {
+	private _sounds = [
+		"a3\sounds_f\sfx\ui\uav\uav_01.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_02.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_03.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_04.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_05.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_06.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_07.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_08.wss",
+		"a3\sounds_f\sfx\ui\uav\uav_09.wss"
+	];
+	
+	private _sound = _sounds select floor random count _sounds;
+	playSoundUI [_sound, 1 , 1];
 };
