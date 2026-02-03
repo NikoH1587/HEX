@@ -1,6 +1,4 @@
 /// [[_pos, _cells, _type, _unit, _border, _morale]]
-/// TODO:
-/// make VOX_GRID be in format of [_pos, _cells, _edges, _type, _unit, _morale]
 VOX_GRID = [];
 
 {

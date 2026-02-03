@@ -1,35 +1,6 @@
 VOX_PHASE = "CUSTOM";
 
 /// TBD: add more types, b_recon (recon), b_unknown (militia)
-/// [_marker, _name]
-VOX_COMPANIES = [
-["b_inf", "Infantry"],
-["b_motor_inf", "Motorized"],
-["b_mech_inf", "Mechanized"],
-["b_air", "Airmobile"],
-["b_naval", "Amphibious"],
-["o_inf", "Infantry"],
-["o_motor_inf", "Motorized"],
-["o_mech_inf", "Mechanized"],
-["o_air", "Airmobile"],
-["o_naval", "Amphibious"]
-];
-
-/// contains cfgGroups and CfgVehicles entires
-VOX_CFG_BINF = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_BMOT = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_BMEC = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_BAIR = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_BNAV = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_OINF = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_OMOT = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_OMEC = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_OAIR = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-VOX_CFG_ONAV = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-
-VOX_CONFIG = [
-
-];
 
 /// [_icon, _name, _config]
 VOX_FACTIONS = [];
@@ -109,6 +80,27 @@ VOX_FNC_FACTION = {
 				
 	}forEach VOX_FACTION;
 	_cfg_list lbSetCurSel -1;
+};
+
+/// [_marker, _name]
+VOX_COMPANIES = [
+["b_inf", "Infantry"],
+["b_motor_inf", "Motorized"],
+["b_mech_inf", "Mechanized"],
+["b_air", "Airmobile"],
+["b_naval", "Amphibious"],
+["o_inf", "Infantry"],
+["o_motor_inf", "Motorized"],
+["o_mech_inf", "Mechanized"],
+["o_air", "Airmobile"],
+["o_naval", "Amphibious"]
+];
+
+/// contains cfgGroups and CfgVehicles entires
+VOX_CONFIG = [[],[],[],[],[],[],[],[],[],[]];
+
+VOX_FNC_ADDCFG = {
+	
 };
 
 /// Open slotting menu if player is ghost unit

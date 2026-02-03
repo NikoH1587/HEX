@@ -26,7 +26,7 @@ class VOX_CUSTOM
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_COMPANY";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Change currently configured company. (Click on list to remove from company)";
+			tooltip = "Configure company. (Click on list to remove unit)";
 		};			
 		
 		class coy_list: RscListbox
@@ -49,7 +49,7 @@ class VOX_CUSTOM
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_FACTION";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Select faction filter. (Click on list to add to company)";
+			tooltip = "Click on list to add unit, recommended 10-15.";
 		};	
 		
 		class cfg_list: RscListbox
@@ -72,7 +72,7 @@ class VOX_CUSTOM
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_BLUFOR";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Add company to BLUFOR side. (Click on list to remove)";
+			tooltip = "Add company to BLUFOR side.";
 		};
 
 		class blu_list: RscListbox
@@ -95,7 +95,7 @@ class VOX_CUSTOM
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_OPFOR";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Add company to OPFOR side. (Click on list to remove)";
+			tooltip = "Add company to OPFOR side.";
 		};
 
 		class opf_list: RscListbox
@@ -116,7 +116,7 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 14 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 9 * GUI_GRID_CENTER_H;
-			tooltip = "Click on map to change positions of HQ's and LOG hub.";
+			tooltip = "Click to reposition objectives.";
 		};
 		
 		class turn: RscCombo
@@ -127,7 +127,6 @@ class VOX_CUSTOM
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "VOX_TURN = [west,east] select (_this select 1);";
-			tooltip = "Change which side has first strategic turn.";
 		};
 		
 		class start: RscButton
@@ -139,7 +138,6 @@ class VOX_CUSTOM
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onButtonClick = "[] call HEX_ADM_FNC_START;";
-			tooltip = "Start campaign with current configuration.";
 		};		
 	};
 };

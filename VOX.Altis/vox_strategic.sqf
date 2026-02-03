@@ -10,7 +10,7 @@ VOX_FNC_SELECTABLE = {
 	private _config = VOX_CFG_WEST;
 	if (_side == east) then {_config = VOX_CFG_EAST};
 	private _counters = [];
-	{_counters pushback [_x select 0]}forEach _config;
+	{_counters pushback _x}forEach _config;
 	
 	VOX_LOC_SELECTABLE = [];
 	{
@@ -59,7 +59,7 @@ VOX_FNC_ORDERS = {
 	if (_side == east) then {_config = VOX_CFG_EAST};
 	
 	private _counters = [];
-	{_counters pushback [_x select 0]}forEach _config;
+	{_counters pushback _x}forEach _config;
 	
 	private _nav = false;
 	private _air = false;
