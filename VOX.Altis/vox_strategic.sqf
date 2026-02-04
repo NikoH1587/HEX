@@ -16,7 +16,7 @@ VOX_FNC_SELECTABLE = {
 	{
 		private _seed = _x;
 		private _pos = _x select 0;
-		if (_x select 3 in _counters) then {
+		if (_x select 4 in _counters) then {
 			VOX_LOC_SELECTABLE pushback _seed;
 			if (_side == side player) then {
 				private _marker = createMarkerLocal [format ["LOC_%1", _pos], _pos];
@@ -53,7 +53,7 @@ VOX_FNC_ORDERS = {
 	private _side = _this;
 	private _selected = VOX_LOC_SELECTED;
 	VOX_LOC_ORDERS = [_selected];
-	private _neighbors = _selected select 4;
+	private _neighbors = _selected select 2;
 	
 	private _config = VOX_CFG_WEST;
 	if (_side == east) then {_config = VOX_CFG_EAST};
@@ -64,15 +64,15 @@ VOX_FNC_ORDERS = {
 	private _nav = false;
 	private _air = false;
 	
-	if (_selected select 3 in ["b_naval", "o_naval"] && _selected select 2 == "NAV") then {_nav = true};
-	if (_selected select 3 in ["b_air", "o_air"] && _selected select 2 == "AIR") then {_air = true};
-	/// [_pos, _cells, _type, _unit, _border, _morale]	
+	copyToClipboard str _selected;
+	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 == "NAV") then {_nav = true};
+	if (_selected select 4 in ["b_air", "o_air"] && _selected select 3 == "AIR") then {_air = true};
 	
 	{
 		private _seed = _x;
 		private _pos = _x select 0;
-		private _type = _x select 2;
-		private _unit = _x select 3;
+		private _type = _x select 3;
+		private _unit = _x select 4;
 		
 		private _isNeighbor = _pos in _neighbors;
 		private _isNavMove = _nav && {_type == "NAV" && _unit == "hd_dot"};

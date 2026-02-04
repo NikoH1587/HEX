@@ -17,26 +17,26 @@ class VOX_CUSTOM
 
 	class Controls
 	{		
-		class company: RscCombo
+		class formation: RscCombo
 		{
 			idc = 1201;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_COMPANY";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_FORMATION";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Configure company. (Click on list to remove unit)";
+			tooltip = "Configure formations. (Click on list to remove group)";
 		};			
 		
-		class coy_list: RscListbox
+		class for_list: RscListbox
 		{
 			idc = 1202;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 12 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_COYDEL";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_DELCFG";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 		
@@ -49,7 +49,7 @@ class VOX_CUSTOM
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_FACTION";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Click on list to add unit, recommended 10-15.";
+			tooltip = "Click on list to add groups, recommended 10-15.";
 		};	
 		
 		class cfg_list: RscListbox
@@ -70,9 +70,9 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 14 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_BLUFOR";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDWEST";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Add company to BLUFOR side.";
+			tooltip = "Add formation to BLUFOR side.";
 		};
 
 		class blu_list: RscListbox
@@ -82,8 +82,9 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 16 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 9 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDWEST";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_DELWEST";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
+			colorBackground[] = {0, 0.3, 0.6, 0.5};
 		};		
 		
 		class opfor: RscCombo
@@ -93,9 +94,9 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 14 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_OPFOR";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDEAST";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-			tooltip = "Add company to OPFOR side.";
+			tooltip = "Add formation to OPFOR side.";
 		};
 
 		class opf_list: RscListbox
@@ -105,8 +106,9 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 16 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 9 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDEAST";
+			onLBSelChanged = "(_this select 1) call VOX_FNC_DELEAST";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
+			colorBackground[] = {0.5, 0, 0, 0.5};
 		};
 
 		class minimap : RscMapControl
@@ -119,25 +121,24 @@ class VOX_CUSTOM
 			tooltip = "Click to reposition objectives.";
 		};
 		
-		class turn: RscCombo
+		class side: RscText
 		{
 			idc = 1210;
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 23 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "VOX_TURN = [west,east] select (_this select 1);";
-		};
+		};		
 		
 		class start: RscButton
 		{
 			idc = 1211;
-			text = "START CAMPAIGN";			
+			text = "> START <";			
 			x = GUI_GRID_CENTER_X + 30 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 23 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call HEX_ADM_FNC_START;";
+			onButtonClick = "[] call VOX_FNC_START;";
 		};		
 	};
 };

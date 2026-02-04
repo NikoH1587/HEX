@@ -4,21 +4,8 @@ waitUntil {!isNil "VOX_DEFENDER"};
 private _posA = VOX_ATTACKER select 0;
 private _posB = VOX_DEFENDER select 0;
 private _posC = [(((_posA select 0) + (_posB select 0)) / 2),(((_posA select 1) + (_posB select 1)) / 2)];
-mapAnimAdd [0, 0.2, _posC];
+mapAnimAdd [1, 0.2, _posC];
 mapAnimCommit;
-
-if (VOX_DEBUG) then {
-	private _polyline = [_posA select 0, _posA select 1, _posB select 0, _posB select 1];
-	private _marker = createMarker [format ["VOX_%1_%2", _posA, _posB], _posA];
-	_marker setMarkerPolyline _polyline;
-};
-
-/// objective marker
-if (isServer) then {
-	private _posA = VOX_ATTACKER select 0;
-	private _posD = VOX_DEFENDER select 0;
-	
-};
 
 /// radio effect for briefing;
 0 call VOX_FNC_RADIO;
@@ -52,8 +39,8 @@ VOX_FNC_ENDBRIEFING = {
 
 			_info lbAdd "TACTICAL BRIEFING:";
 			_info lbAdd "";
-			_info lbAdd "Available supports can be accessed with radio (8 -> 0)";
-			_info lbAdd "'Command Group' leader has High Command Module (Ctrl+Space)";
+			_info lbAdd "Available supports can be accessed with (8 -> 0)";
+			_info lbAdd "'CMD' leader has High Command Module (Ctrl+Space)";
 			
 			/// Start button text
 			if (isServer) then {

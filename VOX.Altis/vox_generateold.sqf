@@ -1,18 +1,19 @@
-/// VOX_GRID = [[_pos0, _edges1, _cells2, _type3, _unit4, _morale5]];
+/// [[_pos, _cells, _type, _unit, _border, _morale]]
+/// TODO:
+/// make VOX_GRID be in format of [_pos, _cells, _edges, _type, _unit, _morale]
 VOX_GRID = [];
-/// get pos and start array
+
 {
 	private _marker = _x;
 	private _type = _x select [0, 3];
 	private _pos = getMarkerPos _x;
 	private _pos = [round (_pos select 0), round (_pos select 1)];
 	if (_type in ["CIV", "NAV", "AIR"]) then {
-		VOX_GRID pushback [_pos, [], [], _type, "hd_dot", 0];
-		if (_type == "CIV") then {deleteMarker _marker};
+		VOX_GRID pushback [_pos, [], _type, "hd_dot", [], 0];
+		if !(VOX_DEBUG) then {deleteMarker _x};
 	}
 }forEach allMapMarkers;
 
-/// generate grid on valid positions
 _fnc_nearest = {
 	private _pos = _this;
 	
@@ -30,19 +31,22 @@ _fnc_nearest = {
 	_nearest
 };
 
+/// create grid
 for "_col" from 0 to round(worldSize / VOX_SIZE) do {
     for "_row" from 0 to round(worldSize / VOX_SIZE) do {
+	
 		private _pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
 		if (surfaceIsWater _pos) then {continue}; /// skip water
-		private _nearest = _pos call _fnc_nearest;
 		
+		private _nearest = _pos call _fnc_nearest;
+
 		(_nearest select 1) pushback [_row, _col];
     };
 };
 
-/// set found edges to 1
-{
-	private _cells = _x select 1;
+_fnc_edgeCells = {
+	private _cells = _this;
+	
 	private _edges = [];
 	private _dirs = [[-1, 0],[1, 0],[0, -1],[0, 1]];
 	
@@ -57,7 +61,9 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 			private _nCol = _col + (_x select 1);
 			private _nPos = [_nCol * VOX_SIZE, _nRow * VOX_SIZE];
 			
-			if (_cells find [_nRow, _nCol] == -1) exitWith {
+			
+			/// if (_nCol < 0 or _nRow < 0 or surfaceIsWater _nPos) exitWith {}
+			if (_nCol < 0 or _nRow < 0 or _cells find [_nRow, _nCol] == -1) exitWith {
 				_isEdge = true;
 			};		
 		}forEach _dirs;
@@ -66,33 +72,41 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 			_edges pushBack _cell;
 		};
 	}forEach _cells;
+	
+	_edges
+};
 
-	_x set [1, _edges];
-}forEach VOX_GRID;
-
-/// set pos to middle of edges
+/// create area markers
 {
-	private _edges = _x select 1;
+	private _cells = _x select 1;
+	private _type = _x select 2;
 	
-	private _posX = 0;
-	private _posY = 0;
-		
+	private _color = [0, 0, 0];
+	private _edges = _cells call _fnc_edgeCells;
+	switch (_type) do {
+		case "NAV": {_color = [0.5, 0.5, 0.5]};
+		case "AIR": {_color = [1, 1, 1]};
+	};
+	
 	{
-		_row = _x select 0;
-		_col = _x select 1;
-		_pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
-		
-		_posX = _posX + (_pos select 0);
-		_posY = _posY + (_pos select 1);
-	}forEach _edges;
-	
-	private _posX = _posX / (count _edges);
-	private _posY = _posY / (count _edges);
-	
-	_x set [0, [round _posX, round _posY]];
+		if (_x in _edges) then {
+			private _row = _x select 0;
+			private _col = _x select 1;
+			private _pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerBrush "Solid";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerColor (format ["#(%1,%2,%3,1)", _color select 0, _color select 1, _color select 2]);
+			_marker setMarkerAlpha 1;		
+		};
+	}forEach _cells;
 }forEach VOX_GRID;
 
-/// get neighboring seeds
+/// get nearby cells
+/// get find cells in seeds
+/// get seed
+
 _fnc_findSeeds = {
 	private _row = _x select 0;
 	private _col = _x select 1;
@@ -116,8 +130,9 @@ _fnc_findSeeds = {
 
 {	
 	private _pos = _x select 0;
-	private _edges = _x select 1;
+	private _cells = _x select 1;
 	private _seeds = [];
+	private _edges = (_x select 1) call _fnc_edgeCells;
 	
 	{
 		private _cellSeeds = _x call _fnc_findSeeds;
@@ -129,49 +144,58 @@ _fnc_findSeeds = {
 		}forEach _cellSeeds;
 	}forEach _edges;
 	
-	_x set [2, _seeds];
+	_x set [4, _seeds];
+	
+	{
+		private _pos2 = _x;
+		if (VOX_DEBUG) then {
+			private _polyline = [_pos select 0, _pos select 1, _pos2 select 0, _pos2 select 1];
+			private _marker = createMarker [format ["VOX_%1_%2", _pos, _pos2], _pos2];
+			_marker setMarkerPolyline _polyline;
+		};
+	}forEach _seeds;
+	
+	if (VOX_DEBUG) then {
+		private _marker = createMarker [format ["VOX_%1_%2", _pos, "_2"], _pos];
+		_marker setMarkerType "hd_dot";
+		_marker setMarkerText str _seeds;
+	};
 }forEach VOX_GRID;
 
-/// place BLUFOR formations
+/// place BLUFOR companies
 {
 
 	private _grid = VOX_GRID;
+	private _dir = 0;
 	private _ord = "ASCEND";
 	
-	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_WEST")}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_WEST")}, "ASCEND", {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	_selectGrid set [4, _x];
+	_selectGrid set [3, _x];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_WEST;
 
-/// place OPFOR formations
+/// place OPFOR counters
 {
 
 	private _grid = VOX_GRID;
+	private _dir = 0;
 	private _ord = "ASCEND";
 	
-	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_EAST")}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_EAST")}, "ASCEND", {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	_selectGrid set [4, _x];
+	_selectGrid set [3, _x];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_EAST;
 
-/// draw grid markers
-0 call VOX_FNC_DRAWGRID;
+/// draw markers
+0 call VOX_FNC_DRAWMARKERS;
 
 /// make grid public;
 publicVariable "VOX_GRID";
-
-/// update zone of control
-{
-	_x call VOX_FNC_UPDATEGRID;
-}forEach VOX_GRID;
-
-/// draw counters
-remoteExec ["VOX_FNC_DRAWMARKERS", 0];

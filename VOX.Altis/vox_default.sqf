@@ -1,6 +1,6 @@
-VOX_DEBUG = false;
-VOX_SIZE = 250;
-VOX_TURN = west;
+VOX_DEBUG = true;
+VOX_SIZE = 500;
+VOX_TURN = [west, east] select floor random 2;
 VOX_PHASE = "STRATEGIC";
 
 VOX_CFG_WEST = ["b_inf", "b_motor_inf", "b_mech_inf", "b_naval", "b_air"];
