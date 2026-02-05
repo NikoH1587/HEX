@@ -1,4 +1,4 @@
-/// VOX_GRID = [[_pos0, _edges1, _cells2, _type3, _unit4, _morale5]];
+/// VOX_GRID = [[_pos0, _edges1, _seeds2, _type3, _unit4, _morale5]];
 VOX_GRID = [];
 /// get pos and start array
 {
@@ -8,7 +8,7 @@ VOX_GRID = [];
 	private _pos = [round (_pos select 0), round (_pos select 1)];
 	if (_type in ["CIV", "NAV", "AIR"]) then {
 		VOX_GRID pushback [_pos, [], [], _type, "hd_dot", 0];
-		if (_type == "CIV") then {deleteMarker _marker};
+		deleteMarker _marker;
 	}
 }forEach allMapMarkers;
 
@@ -42,7 +42,9 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 
 /// set found edges to 1
 {
+	private _seed = _x select 0;
 	private _cells = _x select 1;
+	private _type = _x select 3;
 	private _edges = [];
 	private _dirs = [[-1, 0],[1, 0],[0, -1],[0, 1]];
 	
@@ -50,46 +52,27 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 		private _cell = _x;
 		private _row = _x select 0;
 		private _col = _x select 1;
-		private _isEdge = false;
+		private _edge = false;
 		
 		{
 			private _nRow = _row + (_x select 0);
 			private _nCol = _col + (_x select 1);
 			private _nPos = [_nCol * VOX_SIZE, _nRow * VOX_SIZE];
 			
-			if (_cells find [_nRow, _nCol] == -1 && !(surfaceIsWater _nPos)) exitWith {
-				_isEdge = true;
+			private _isEdge = _cells find [_nRow, _nCol] == -1;
+			private _isLand = !(surfaceIsWater _nPos);
+			
+			if (_isEdge && _isLand) exitWith {
+				_edge = true;
 			};		
 		}forEach _dirs;
 		
-		if (_isEdge) then {
+		if (_edge) then {
 			_edges pushBack _cell;
 		};
 	}forEach _cells;
 
 	_x set [1, _edges];
-}forEach VOX_GRID;
-
-/// set pos to middle of edges
-{
-	private _edges = _x select 1;
-	
-	private _posX = 0;
-	private _posY = 0;
-		
-	{
-		_row = _x select 0;
-		_col = _x select 1;
-		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
-		
-		_posX = _posX + (_pos select 0);
-		_posY = _posY + (_pos select 1);
-	}forEach _edges;
-	
-	private _posX = _posX / (count _edges);
-	private _posY = _posY / (count _edges);
-	
-	_x set [0, [round _posX, round _posY]];
 }forEach VOX_GRID;
 
 /// get neighboring seeds
@@ -165,6 +148,8 @@ _fnc_findSeeds = {
 /// draw grid markers
 0 call VOX_FNC_DRAWGRID;
 
+0 call VOX_FNC_DRAWDIRS;
+
 /// make grid public;
 publicVariable "VOX_GRID";
 
@@ -175,3 +160,9 @@ publicVariable "VOX_GRID";
 
 /// draw counters
 remoteExec ["VOX_FNC_DRAWMARKERS", 0];
+
+/// count markers
+
+if (VOX_DEBUG) then {
+	hint ((str (count allMapMarkers)) + " markers created");
+};
