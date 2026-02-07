@@ -1,4 +1,4 @@
-/// VOX_GRID = [[_pos0, _cell1, _seeds2, _type3, _unit4, _morale5, (_tempcells6)]];
+/// VOX_GRID = [[_pos0, _color1, _seeds2, _type3, _unit4, _morale5, (_tempcells6)]];
 VOX_GRID = [];
 /// get pos and start array
 {
@@ -8,7 +8,7 @@ VOX_GRID = [];
 	private _pos = [round (_pos select 0), round (_pos select 1)];
 	private _legend = _marker in ["CIV_0","MIL_0","AIR_0","NAV_0"];
 	if (_type in ["CIV", "MIL", "NAV", "AIR"] && !_legend) then {
-		VOX_GRID pushback [_pos, [_marker, "ColorWHITE"], [], _type, "hd_dot", 0, []];
+		VOX_GRID pushback [_pos, "colorBLACK", [], _type, "hd_dot", 0, []];
 		/// deleteMarker _marker;
 	}
 }forEach allMapMarkers;
@@ -33,7 +33,7 @@ _fnc_nearest = {
 
 for "_col" from 0 to round(worldSize / VOX_SIZE) do {
     for "_row" from 0 to round(worldSize / VOX_SIZE) do {
-		private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		///private _isWater = (surfaceIsWater _pos);
 		private _isWoods = ((_pos nearRoads (VOX_SIZE * 0.7)) isEqualTo []);
 		if (_isWoods) then {continue}; /// skip water and wasteland
@@ -43,54 +43,24 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
     };
 };
 
-/// debug temporary cells
-if (VOX_DEBUG) then {
+/// set pos to middle of cells
+{
+	private _cells = _x select 6;
+	private _posX = 0;
+	private _posY = 0;
 	{
-		private _cells = _x select 6;
-		{
-			private _row = _x select 0;
-			private _col = _x select 1;
-			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
-
-			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
-			_marker setMarkerShape "RECTANGLE";
-			_marker setMarkerBrush "Solid";
-			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
-			_marker setMarkerAlpha 0.5;
-		}forEach _cells;
-	}forEach VOX_GRID;	
-};
-
-/// TODO:
-/// make the actual tarrain cells into temp array here
-/// index == VOX_GRID index
-/// just store the cells to draw markers on load
-/// can be upsampled to be larger?
-
-/// just store so polyline can be drawn?
-/// store just single pos (from center) + radius to nearest obj? ( from center)
-/// store size A (nearest) sizeB, dir and pos?
-
-/// MOTORIZED
-/// Can move twice?
-/// ignore turn swich?
-/// keep internal counter????
-
-/// Add 3rd standard movement formation
-/// Militia / Reservist
-/// extra flavor
-/// "b_recon" marker
-
-/// Logistics constraint -> Militia
-/// Vehicle constraint -> Infantry
-/// Opposition roughness constraint -> Mechanized
-/// Distance constraint -> Motorized
-/// Water constraint -> Amphibious
-/// Complex terrain constraint -> Airmobile
-
-/// Move counter to center!
-/// so that spawn area calculation is easier
-/// and also can have the air/naval markers!
+		private _row = _x select 0;
+		private _col = _x select 1;
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+		_posX = _posX + (_pos select 0);
+		_posY = _posY + (_pos select 1);
+	}forEach _cells;
+	
+	private _count = count _cells;
+	private _posC = [round (_posX / _count), round(_posY / _count)];
+	
+	_x set [0, _posC];
+}forEach VOX_GRID;
 
 /// get neighboring seeds
 _fnc_findSeeds = {
@@ -132,15 +102,9 @@ _fnc_findSeeds = {
 	_x set [2, _seeds];
 }forEach VOX_GRID;
 
-/// set pos to middle of temporary cells
-{
-	
-}forEach VOX_GRID;
-
-/// remove temporary cells array
-{
-	_x deleteAt 6;
-}forEach VOX_GRID;
+/// reverse configs, so first units in list spawn further
+reverse VOX_CFG_WEST;
+reverse VOX_CFG_EAST;
 
 /// place BLUFOR formations
 {
@@ -148,13 +112,22 @@ _fnc_findSeeds = {
 	private _grid = VOX_GRID;
 	private _ord = "ASCEND";
 	
-	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_WEST")}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _worldPos = [0, 0];
+	private _worldW = [0, worldSize / 2];
+	private _worldE = [worldSize, worldSize / 2];
+	private _worldN = [worldSize / 2, worldSize];
+	private _worldS = [worldSize / 2, 0];
+	if (VOX_SCENARIO == "WEST") then {_worldPos = _worldW};
+	if (VOX_SCENARIO == "EAST") then {_worldPos = _worldE};
+	if (VOX_SCENARIO == "NORTH") then {_worldPos = _worldN};
+	if (VOX_SCENARIO == "SOUTH") then {_worldPos = _worldS};
+	
+	private _sorted = [_grid, [], {(_x select 0) distance _worldPos}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	private _marker = (_selectGrid select 1) select 0;
-	_selectGrid set [1, [_marker, "ColorBLUFOR"]];
+	_selectGrid set [1, "ColorBLUFOR"];
 	_selectGrid set [4, _x];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_WEST;
@@ -165,21 +138,30 @@ _fnc_findSeeds = {
 	private _grid = VOX_GRID;
 	private _ord = "ASCEND";
 	
-	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_EAST")}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _worldPos = [0, 0];
+	private _worldW = [0, worldSize / 2];
+	private _worldE = [worldSize, worldSize / 2];
+	private _worldN = [worldSize / 2, worldSize];
+	private _worldS = [worldSize / 2, 0];
+	if (VOX_SCENARIO == "WEST") then {_worldPos = _worldW};
+	if (VOX_SCENARIO == "EAST") then {_worldPos = _worldE};
+	if (VOX_SCENARIO == "NORTH") then {_worldPos = _worldN};
+	if (VOX_SCENARIO == "SOUTH") then {_worldPos = _worldS};
+	
+	private _sorted = [_grid, [], {(_x select 0) distance _worldPos}, "DESCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	private _marker = (_selectGrid select 1) select 0;
-	_selectGrid set [1, [_marker, "ColorOPFOR"]];
+	_selectGrid set [1, "ColorOPFOR"];
 	_selectGrid set [4, _x];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_EAST;
 
 hint str VOX_GRID;
 
-/// draw connections
-0 call VOX_FNC_DRAWDIRS;
+/// draw grid;
+0 call VOX_FNC_DRAWGRID;
 
 /// make grid public;
 publicVariable "VOX_GRID";
@@ -192,9 +174,25 @@ publicVariable "VOX_GRID";
 /// draw counters
 remoteExec ["VOX_FNC_DRAWMARKERS", 0];
 
-/// count markers
-
+/// count markers and debug connections
 if (VOX_DEBUG) then {
+	{
+		private _pos = _x select 0;
+		private _seeds = _x select 2;
+		private _posX = _pos select 0;
+		private _posY = _pos select 1;
+		{
+			private _posX1 = _x select 0;
+			private _posY1 = _x select 1;
+			private _plus = _posX + _posY + _posX1 + _posY1;
+			private _name = format ["VOX_%1", _plus];
+			private _marker = createMarker [_name, _pos];
+			private _polyline = [_posX, _posY, _posX1, _posY1];
+			_marker setMarkerShape "Polyline";
+			_marker setMarkerPolyline _polyline;
+			_marker setMarkerAlpha 0.25;
+		}forEach _seeds;
+	}forEach VOX_GRID;
 	hint ((str (count allMapMarkers)) + " markers created");
 };
 

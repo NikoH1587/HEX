@@ -1,83 +1,59 @@
-/// VOX_GRID = [[_pos0, _cell1, _seeds2, _type3, _unit4, _morale5]];
-VOX_FNC_DRAWDIRS = {
+/// VOX_GRID = [[_pos0, _color1, _seeds2, _type3, _unit4, _morale5, _cells6]];
+VOX_FNC_DRAWGRID = 	{
 	{
-		private _pos = _x select 0;
-		private _posX = _pos select 0;
-		private _posY = _pos select 1;
-
-		private _seeds = _x select 2;
-		private _idx = _forEachIndex;
-		
-		private _radius = 10000;
-		
+		private _color = _x select 1;
+		private _cells = _x select 6;
 		{
-			private _posXS = _x select 0;
-			private _posYS = _x select 1;
-			private _dir = _pos getDir _x;
-			private _posS = [(_posX + _posXS) / 2, (_posY + _posYS) / 2];
-			private _distance = _posS distance _pos;
-			
-			if (_distance < _radius) then {
-				_radius = _distance;
-			};
+			private _row = _x select 0;
+			private _col = _x select 1;
+			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 
-			private _marker = createMarker [format ["VOX_%1", _posS], _posS];			
-			_marker setMarkerType "mil_box";
-			_marker setMarkerDir _dir;
-			_marker setMarkerAlpha 0.25;
-			_marker setMarkerSize [0.25, 3];
-		}forEach _seeds;
-		
-		private _marker = createMarker [format ["VOX_%1", _pos], _pos];
-		_marker setMarkerShape "ELLIPSE";
-		_marker setMarkerSize [_radius, _radius];
-		_marker setMarkerAlpha 0.5;
+			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerBrush "Solid";
+			_marker setMarkerColor _color;
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.5;
+		}forEach _cells;
 	}forEach VOX_GRID;
 };
 
-VOX_FNC_CLEARDIRS = {
+VOX_FNC_CLEARGRID = {
 	{
-		private _pos = _x select 0;
-		private _posX = _pos select 0;
-		private _posY = _pos select 1;
-
-		private _seeds = _x select 2;
-		private _idx = _forEachIndex;
+		private _color = _x select 1;
+		private _cells = _x select 6;
 		{
-			private _posX1 = _x select 0;
-			private _posY1 = _x select 1;
-			private _dir = _pos getDir _x;
-			private _pos1 = [(_posX + _posX1) / 2, (_posY + _posY1) / 2];
+			private _row = _x select 0;
+			private _col = _x select 1;
+			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 
-			private _marker = format ["VOX_%1", _pos1];			
-			deleteMarker _marker;
-		}forEach _seeds;
+			private _name = format ["VOX_%1_%2", _row, _col];
+			deleteMarker _name;
+		}forEach _cells;
 	}forEach VOX_GRID;
 };
 
 VOX_FNC_UPDATEGRID = {
-	{
-		/// ["CIV_1", "Default"];
-		private _pos = _this select 0;
-		private _cell = _this select 1;
-		
-		private _marker1 = format ["VOX_%1", _pos];		
-		
-		private _marker2 = _cell select 0;
-		private _side = _cell select 1;
+	private _color = _this select 1;
+	private _unit = _this select 4;
+	private _cells = _this select 6;
 
-		if (_side != getMarkerColor _marker2) then {
-			_marker1 setMarkerColor _side;
-			_marker2 setMarkerColor _side;
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+
+		private _marker = format ["VOX_%1_%2", _row, _col];
+		if (markerColor _marker != _color) then {
+			_marker setMarkerColor _color;;		
 		};
-	}forEach VOX_GRID;
+	}forEach _cells;
 };
 
-VOX_FNC_DRAWCOUNTERS = {
-	/// add recon showing units
+VOX_FNC_DRAWMARKERS = {
 
 	{
 		private _pos = _x select 0;
+		private _color = _x select 1;
 		private _unit = _x select 4;
 		private _morale = _x select 5;
 		
@@ -85,7 +61,10 @@ VOX_FNC_DRAWCOUNTERS = {
 		deleteMarkerLocal _name;
 		
 		private _side = west;
-		if (_unit select [0, 1] == "o") then {_side = east};		
+		if (_color == "ColorOPFOR") then {_side = east};	
+
+		/// special rule for recon unit
+		/// show unit icon when next to it
 		
 		if (_unit != "hd_dot" && (side player == _side)) then {
 			private _marker = createMarkerLocal [_name, _pos];
@@ -107,9 +86,6 @@ VOX_FNC_DRAWCOUNTERS = {
 VOX_FNC_CLEARMARKERS = {
 	{
 		private _pos = _x select 0;
-		private _cells = _x select 2;
-		private _unit = _x select 4;
-
 		private _marker = format ["VOX_%1", _pos];
 		deleteMarkerLocal _marker;
 	}forEach VOX_GRID;
@@ -172,8 +148,8 @@ VOX_FNC_MOVE = {
 	
 	if (_new select 4 == "hd_dot" or _old IsEqualTo _new) then {
 
-		private _newold = [_old select 0, _new select 1, _old select 2, _old select 3, "hd_dot", 0];
-		private _newnew = [_new select 0, _new select 1, _new select 2, _new select 3, _old select 4, _old select 5];
+		private _newold = [_old select 0, _new select 1, _old select 2, _old select 3, "hd_dot", 0, _old select 6];
+		private _newnew = [_new select 0, _new select 1, _new select 2, _new select 3, _old select 4, _old select 5, _new select 6];
 		
 		VOX_GRID set [_indexOld, _newold];
 		VOX_GRID set [_indexNew, _newnew];	
@@ -183,7 +159,7 @@ VOX_FNC_MOVE = {
 		remoteExec ["VOX_FNC_DRAWMARKERS", 0];
 		
 		/// update grid
-		0 call VOX_FNC_UPDATEGRID;
+		_newnew call VOX_FNC_UPDATEGRID;
 		
 		/// strategic update
 		remoteExec ["VOX_FNC_UPDATE", 0];	
@@ -198,9 +174,8 @@ VOX_FNC_MOVE = {
 		publicVariable "VOX_DEFENDER";
 		remoteExec ["VOX_FNC_CLEARMARKERS", 0];
 		0 call VOX_FNC_CLEARGRID;
-		0 call VOX_FNC_CLEARDIRS;
-		0 call VOX_FNC_SUPPORTS;
-		0 call VOX_FNC_DRAWOBJECTIVES;
+		///0 call VOX_FNC_SUPPORTS;
+		///0 call VOX_FNC_DRAWOBJECTIVES;
 		["vox_briefing.sqf"] remoteExec ["execVM"];
 	};
 };

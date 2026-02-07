@@ -8,6 +8,11 @@
 private _group = [[15351.2,17080.1,0], west, 5] call BIS_fnc_spawnGroup;
 {addSwitchableUnit _x}forEach units _group;
 
+/// TODO:
+/// synch aircart to aristrike support
+/// sync helicopters to gunship support
+/// sync helicopters with cargoseat to transport support
+
 /// open teamswitch menu and close map&menu
 remoteExec ["VOX_FNC_CLOSEMAP", 0];
 remoteExec ["VOX_FNC_SLOTTING", 0];

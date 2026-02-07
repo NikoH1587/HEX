@@ -1,3 +1,4 @@
+/// VOX_GRID = [[_pos0, _color1, _seeds2, _type3, _unit4, _morale5, _cells6]];
 waitUntil {!isNil "VOX_PHASE"};
 
 VOX_LOC_SELECTABLE = [];
@@ -63,9 +64,11 @@ VOX_FNC_ORDERS = {
 	
 	private _nav = false;
 	private _air = false;
+	private _air2 = false;
 	
 	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 == "NAV") then {_nav = true};
 	if (_selected select 4 in ["b_air", "o_air"] && _selected select 3 == "AIR") then {_air = true};
+	if (_selected select 4 in ["b_plane", "o_plane"] && _selected select 3 == "AIR2") then {_air2 = true};
 	
 	{
 		private _seed = _x;
@@ -76,9 +79,11 @@ VOX_FNC_ORDERS = {
 		private _isNeighbor = _pos in _neighbors;
 		private _isNavMove = _nav && {_type == "NAV" && _unit == "hd_dot"};
 		private _isAirMove = _air && {_type == "AIR" && _unit == "hd_dot"};
+		private _isAir2Move = _air2 && {_type2 == "AIR" && _unit == "hd_dot"};
+		
 		private _isNotFriend = !(_unit in _counters);
 		
-		if ((_isNeighbor or _isNavMove or _isAirMove) && _isNotFriend) then {
+		if (((_isNeighbor && _isAir2Move == false) or _isNavMove or _isAirMove) && _isNotFriend) then {
 			VOX_LOC_ORDERS pushback _seed;
 		} else {
 			private _marker = format ["LOC_%1", _pos];
@@ -136,7 +141,7 @@ if (VOX_LOC_COMMANDER) then {
 VOX_LOC_AICOUNT = 0;
 VOX_FNC_AICMD = {
 	private _side = _this;
-	
+	///if (true) exitwith {VOX_TURN = west; 0 call VOX_FNC_UPDATE};
 	_side call VOX_FNC_SELECTABLE;
 	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
 	private _pos = _select select 0;
@@ -151,6 +156,7 @@ VOX_FNC_AICMD = {
 	} else {
 		/// if fails to move the current counter, start again
 		VOX_LOC_AICOUNT = VOX_LOC_AICOUNT + 1;
+		sleep 0.1;
 		_side call VOX_FNC_AICMD;
 	};
 };

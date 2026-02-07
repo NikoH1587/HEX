@@ -106,7 +106,7 @@ _names2 = [
 
 VOX_FNC_DRAWCONNECTIONS = {
 	{
-		private _pos = _x select 1;
+		private _pos = _x select 0;
 		private _seeds = _x select 1;
 		private _posX = _pos select 0;
 		private _posY = _pos select 1;
@@ -529,4 +529,138 @@ VOX_FNC_UPDATEGRID = {
 			_marker setMarkerColor _color;;		
 		};
 	}forEach _edges;
+};
+
+
+VOX_FNC_ADDWEST = {	
+
+	private _names = [
+	"Alpha","Bravo","Charlie",
+	"Delta","Echo","Foxtrot",
+	"Golf","Hotel","India",
+	"HHC"
+	];
+	
+	private _name = _names select count VOX_CFG_WEST;
+	
+	private _selected = VOX_FORMATIONS select _this;
+
+	private _marker = _selected select 0;
+	private _icon = "\A3\ui_f\data\map\markers\nato\" + _marker + ".paa";
+
+	private _menu = findDisplay 1200;
+	private _blu_list =  _menu displayCtrl 1206;
+	
+	/// add to config
+	VOX_CFG_WEST pushback _marker;
+	
+	/// add to ui
+	private _added = _blu_list lbAdd _name;
+	_blu_list lbSetPicture [_added, _icon];
+	_blu_list lbSetPictureColor [_added, [0, 0.3, 0.6, 1]];
+};
+
+VOX_FNC_DELWEST = {
+	if (_this == -1) exitWith {};
+
+	private _menu = findDisplay 1200;
+	private _blu_list =  _menu displayCtrl 1206;
+
+	private _selected = VOX_CFG_WEST select _this;
+	_blu_list lbDelete _this;
+	
+	VOX_CFG_WEST deleteAt _this;
+	
+	_blu_list lbSetCurSel -1;
+};
+
+VOX_FNC_ADDEAST = {	
+
+	private _names = [
+	"1st 1Bn","2nd 1Bn","3rd 1Bn",
+	"1st 2Bn","2nd 2Bn","3rd 2Bn",
+	"1st 3Bn","2nd 3Bn","3rd 3Bn",
+	"Bde HQ"
+	];
+
+	private _name = _names select count VOX_CFG_EAST;
+
+	private _selected = VOX_FORMATIONS select (_this + 10);
+
+	private _marker = _selected select 0;
+	private _icon = "\A3\ui_f\data\map\markers\nato\" + _marker + ".paa";
+
+	private _menu = findDisplay 1200;
+	private _opf_list =  _menu displayCtrl 1208;
+	
+	VOX_CFG_EAST pushback _marker;
+	
+	private _added = _opf_list lbAdd _name;
+	_opf_list lbSetPicture [_added, _icon];
+	_opf_list lbSetPictureColor [_added, [0.5, 0, 0, 1]];
+};
+
+VOX_FNC_DELEAST = {
+	if (_this == -1) exitWith {};
+
+	private _menu = findDisplay 1200;
+	private _opf_list =  _menu displayCtrl 1208;
+
+	private _selected = VOX_CFG_EAST select _this;
+	_opf_list lbDelete _this;
+	
+	VOX_CFG_EAST deleteAt _this;
+	
+	_opf_list lbSetCurSel -1;
+};
+
+VOX_FNC_DRAWDIRS = {
+	{
+		private _pos = _x select 0;
+		private _posX = _pos select 0;
+		private _posY = _pos select 1;
+
+		private _seeds = _x select 2;
+		private _idx = _forEachIndex;
+		
+		private _radius = 10000;
+		
+		{
+			private _posXS = _x select 0;
+			private _posYS = _x select 1;
+			private _dir = _pos getDir _x;
+			private _posS = [(_posX + _posXS) / 2, (_posY + _posYS) / 2];
+			private _distance = _posS distance _pos;
+			
+			if (_distance < _radius) then {
+				_radius = _distance;
+			};
+
+			private _marker = createMarker [format ["VOX_%1", _posS], _posS];			
+			_marker setMarkerType "mil_box";
+			_marker setMarkerDir _dir;
+			_marker setMarkerAlpha 0.25;
+			_marker setMarkerSize [0.25, 3];
+		}forEach _seeds;
+	}forEach VOX_GRID;
+};
+
+VOX_FNC_CLEARDIRS = {
+	{
+		private _pos = _x select 0;
+		private _posX = _pos select 0;
+		private _posY = _pos select 1;
+
+		private _seeds = _x select 2;
+		private _idx = _forEachIndex;
+		{
+			private _posX1 = _x select 0;
+			private _posY1 = _x select 1;
+			private _dir = _pos getDir _x;
+			private _pos1 = [(_posX + _posX1) / 2, (_posY + _posY1) / 2];
+
+			private _marker = format ["VOX_%1", _pos1];			
+			deleteMarker _marker;
+		}forEach _seeds;
+	}forEach VOX_GRID;
 };

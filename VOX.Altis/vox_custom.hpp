@@ -21,7 +21,7 @@ class VOX_CUSTOM
 		{
 			idc = 1201;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 6 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_FORMATION";
@@ -33,9 +33,9 @@ class VOX_CUSTOM
 		{
 			idc = 1202;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 8 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
-			h = 13 * GUI_GRID_CENTER_H;
+			h = 17 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_DELCFG";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
@@ -44,7 +44,7 @@ class VOX_CUSTOM
 		{
 			idc = 1203;
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 6 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_FACTION";
@@ -56,7 +56,7 @@ class VOX_CUSTOM
 		{
 			idc = 1204;
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 8 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 17 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDCFG";
@@ -67,11 +67,10 @@ class VOX_CUSTOM
 		{
 			idc = 1205;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 15 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
-			h = 2 * GUI_GRID_CENTER_H;
+			h = 1 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDWEST";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 			tooltip = "Add formation to BLUFOR side.";
 		};
 
@@ -79,23 +78,22 @@ class VOX_CUSTOM
 		{
 			idc = 1206;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 17 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 1 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
-			h = 8 * GUI_GRID_CENTER_H;
+			h = 5 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_DELWEST";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0, 0.3, 0.6, 0.5};
+			wholeHeight = 0.1 * GUI_GRID_CENTER_H;
 		};		
 		
 		class opfor: RscCombo
 		{
 			idc = 1207;
 			x = GUI_GRID_CENTER_X + 10 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 15 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
-			h = 2 * GUI_GRID_CENTER_H;
+			h = 1 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_ADDEAST";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 			tooltip = "Add formation to OPFOR side.";
 		};
 
@@ -103,11 +101,10 @@ class VOX_CUSTOM
 		{
 			idc = 1208;
 			x = GUI_GRID_CENTER_X + 10 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 17 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 1 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
-			h = 8 * GUI_GRID_CENTER_H;
+			h = 5 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "(_this select 1) call VOX_FNC_DELEAST";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0.5, 0, 0, 0.5};
 		};
 		
@@ -115,7 +112,7 @@ class VOX_CUSTOM
 		{
 			idc = 1209;
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 19 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			tooltip = "Paste config here. (ctrl + v)";
@@ -126,7 +123,7 @@ class VOX_CUSTOM
 			idc = 1210;
 			text = "IMPORT";			
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 21 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onButtonClick = "[] call VOX_FNC_IMPORT;";
@@ -138,7 +135,7 @@ class VOX_CUSTOM
 			idc = 1211;
 			text = "EXPORT";			
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 23 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 4 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onButtonClick = "[] call VOX_FNC_EXPORT;";
@@ -149,7 +146,7 @@ class VOX_CUSTOM
 		{
 			idc = 1212;
 			x = GUI_GRID_CENTER_X + 30 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 21 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "VOX_SCENARIO = ['WEST','EAST','NORTH','SOUTH'] select (_this select 1)";
@@ -161,7 +158,7 @@ class VOX_CUSTOM
 			idc = 1213;
 			text = "> START <";			
 			x = GUI_GRID_CENTER_X + 30 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 23 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 4 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onButtonClick = "[] call VOX_FNC_START;";
